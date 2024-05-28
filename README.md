@@ -10,5 +10,11 @@
 
  
  The video below depicts how the car travels around the circle:
+
  
- 
+
+https://github.com/leyusufo/ECE_306_PROJ7/assets/78242042/80eaf1b0-5275-454b-941c-e3bcf4af46c8
+
+
+
+
