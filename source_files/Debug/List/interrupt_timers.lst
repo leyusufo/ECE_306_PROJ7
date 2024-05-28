@@ -1,0 +1,991 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.20.1.997/W32 for MSP430           23/Apr/2021  20:27:56
+# Copyright 1996-2020 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.20
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\interrupt_timers.c
+#    Command line  =  
+#        -f C:\Users\loyda\AppData\Local\Temp\EW17E2.tmp
+#        ("C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\interrupt_timers.c" -lC
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List" -o
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj" --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --debug -D__MSP430FR2355__ -e --double=32
+#        --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.4\430\lib\dlib\dl430xlsfn.h" -I ./ --core=430X --data_model=small
+#        -On --multiplier=32 --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List\interrupt_timers.lst
+#    Object file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj\interrupt_timers.r43
+#
+###############################################################################
+
+C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306 CODE\Project_07\interrupt_timers.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains timerB interrupts
+      4          //        
+      5          //
+      6          //
+      7          //  Loyda Yusufova
+      8          //  Febreuary 12
+      9          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.20.1)
+     10          //------------------------------------------------------------------------------
+     11          
+     12          #include  "functions.h"
+     13          #include  "macros.h"
+     14          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x700
+   \   union <unnamed> _A_ADCCTL0_L
+   \                     _A_ADCCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x70a
+   \   union <unnamed> _A_ADCMCTL0_L
+   \                     _A_ADCMCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x21a
+   \   union <unnamed> _A_PAIE_L
+   \                     _A_PAIE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x21c
+   \   union <unnamed> _A_PAIFG_L
+   \                     _A_PAIFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23a
+   \   union <unnamed> _A_PBIE_L
+   \                     _A_PBIE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23c
+   \   union <unnamed> _A_PBIFG_L
+   \                     _A_PBIFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0xcb6
+   \   union <unnamed> _A_SAC3DAT_L
+   \                     _A_SAC3DAT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x384
+   \   union <unnamed> _A_TB0CCTL1_L
+   \                     _A_TB0CCTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x386
+   \   union <unnamed> _A_TB0CCTL2_L
+   \                     _A_TB0CCTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x392
+   \   union <unnamed> _A_TB0CCR0_L
+   \                     _A_TB0CCR0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x394
+   \   union <unnamed> _A_TB0CCR1_L
+   \                     _A_TB0CCR1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x396
+   \   union <unnamed> _A_TB0CCR2_L
+   \                     _A_TB0CCR2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3ae
+   \   union <unnamed> _A_TB0IV_L
+   \                     _A_TB0IV_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3c2
+   \   union <unnamed> _A_TB1CCTL0_L
+   \                     _A_TB1CCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3c4
+   \   union <unnamed> _A_TB1CCTL1_L
+   \                     _A_TB1CCTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3c6
+   \   union <unnamed> _A_TB1CCTL2_L
+   \                     _A_TB1CCTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3d2
+   \   union <unnamed> _A_TB1CCR0_L
+   \                     _A_TB1CCR0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3d4
+   \   union <unnamed> _A_TB1CCR1_L
+   \                     _A_TB1CCR1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3d6
+   \   union <unnamed> _A_TB1CCR2_L
+   \                     _A_TB1CCR2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3ee
+   \   union <unnamed> _A_TB1IV_L
+   \                     _A_TB1IV_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x404
+   \   union <unnamed> _A_TB2CCTL1_L
+   \                     _A_TB2CCTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x412
+   \   union <unnamed> _A_TB2CCR0_L
+   \                     _A_TB2CCR0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x414
+   \   union <unnamed> _A_TB2CCR1_L
+   \                     _A_TB2CCR1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x42e
+   \   union <unnamed> _A_TB2IV_L
+   \                     _A_TB2IV_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x454
+   \   union <unnamed> _A_TB3CCR1_L
+   \                     _A_TB3CCR1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x456
+   \   union <unnamed> _A_TB3CCR2_L
+   \                     _A_TB3CCR2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x46e
+   \   union <unnamed> _A_TB3IV_L
+   \                     _A_TB3IV_L:
+   \   000000                DS8 2
+     15          
+     16          //variables for timer0ccro
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          unsigned int Time_Sequence=RESET_STATE;
+   \                     Time_Sequence:
+   \   000000                DS8 2
+     18          extern volatile unsigned char update_display;
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          char one_time=RESET_STATE;
+   \                     one_time:
+   \   000000                DS8 1
+     20          
+     21          //variables for timer0ccr1 and ccr2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          extern unsigned int display_changer=RESET_STATE;
+   \                     display_changer:
+   \   000000                DS8 2
+     23          extern unsigned int debounce_sw1;//variables for timer0ccr1
+     24          extern unsigned int debounce_sw2;//variables for timer0ccr2
+     25          
+     26          //variables for timer1ccr0
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     27          extern unsigned int ADC_Left_Array[8]={RESET_STATE};
+   \                     ADC_Left_Array:
+   \   000000                DS8 16
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     28          extern unsigned int ADC_Right_Array[8]={RESET_STATE};
+   \                     ADC_Right_Array:
+   \   000000                DS8 16
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     29          extern unsigned int ADC_Thumb_Array[8]={RESET_STATE};
+   \                     ADC_Thumb_Array:
+   \   000000                DS8 16
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     30          unsigned int sample_index = RESET_STATE;
+   \                     sample_index:
+   \   000000                DS8 2
+     31          extern unsigned int ADC_Left_Detect;
+     32          extern unsigned int ADC_Right_Detect;
+     33          extern unsigned int ADC_Thumb_Detect;
+     34          extern unsigned int ADC_Left_Detect_Avg;
+     35          extern unsigned int ADC_Right_Detect_Avg;
+     36          extern unsigned int ADC_Thumb_Detect_Avg;
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     37          extern char changeDisplay=RESET_STATE;
+   \                     changeDisplay:
+   \   000000                DS8 1
+     38          extern char new_ADC_reading;
+     39          extern char average_flag;
+     40          
+     41          //timerB2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     42          unsigned int Time_Sequence_Aclk=RESET_STATE;
+   \                     Time_Sequence_Aclk:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     43          unsigned int t1ccr2_counter=RESET_STATE;
+   \                     t1ccr2_counter:
+   \   000000                DS8 2
+     44          
+     45          extern char start_wheels;
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     46          extern unsigned int t1ccr2_flag=RESET_STATE;
+   \                     t1ccr2_flag:
+   \   000000                DS8 2
+     47          //dac
+     48          extern unsigned int DAC_data;
+     49          
+     50          //TimerB0 interrupts
+     51          //------------------------------------------------------------------------------
+     52          //TimerB0 0 interrupt handler
+     53          #pragma vector = TIMER0_B0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     54          __interrupt void Timer0_B0_ISR(void){
+   \                     Timer0_B0_ISR:
+   \   000000   1F15         PUSHM.W #0x2, R15
+     55            //add what needs to happen in the interrupt
+     56            // Time Sequence
+     57            one_time = TRUE;
+   \   000002   D243....     MOV.B   #0x1, &one_time
+     58            
+     59            //time sequence
+     60            if(Time_Sequence++ > 250){
+   \   000006   1F42....     MOV.W   &Time_Sequence, R15
+   \   00000A   0E4F         MOV.W   R15, R14
+   \   00000C   1E53         ADD.W   #0x1, R14
+   \   00000E   824E....     MOV.W   R14, &Time_Sequence
+   \   000012   3F90FB00     CMP.W   #0xfb, R15
+   \   000016   0228         JNC     ??Timer0_B0_ISR_0
+     61              Time_Sequence = RESET_STATE;
+   \   000018   8243....     MOV.W   #0x0, &Time_Sequence
+     62            }
+     63            
+     64            //to update display every 200ms
+     65            if(display_changer++ > 5){
+   \                     ??Timer0_B0_ISR_0:
+   \   00001C   1F42....     MOV.W   &display_changer, R15
+   \   000020   0E4F         MOV.W   R15, R14
+   \   000022   1E53         ADD.W   #0x1, R14
+   \   000024   824E....     MOV.W   R14, &display_changer
+   \   000028   3F900600     CMP.W   #0x6, R15
+   \   00002C   0228         JNC     ??Timer0_B0_ISR_1
+     66              update_display = TRUE;
+   \   00002E   D243....     MOV.B   #0x1, &update_display
+     67            }
+     68            
+     69            TB0CCR0 += TB0CCR0_INTERVAL;//add offset to TBCCR0
+   \                     ??Timer0_B0_ISR_1:
+   \   000032   B2506A189203 ADD.W   #0x186a, &0x392
+     70          }
+   \   000038   1E17         POPM.W  #0x2, R15
+   \   00003A   0013         RETI
+   \   00003C                REQUIRE _A_TB0CCR0_L
+     71          
+     72          //timerB0 1-2, overflow interrupt vector (TBIV) handler
+     73          #pragma vector = TIMER0_B1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     74          __interrupt void TIMER0_B1_ISR(void){
+   \                     TIMER0_B1_ISR:
+   \   000000   1F15         PUSHM.W #0x2, R15
+     75            switch(__even_in_range(TB0IV, 14)){//__even_in_range because TimerB=even interval
+   \   000002   1F42AE03     MOV.W   &0x3ae, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for TIMER0_B1_ISR>_0`:
+   \   000008   2C3C         JMP     ??TIMER0_B1_ISR_1
+   \   00000A   063C         JMP     ??TIMER0_B1_ISR_4
+   \   00000C   183C         JMP     ??TIMER0_B1_ISR_5
+   \   00000E   293C         JMP     ??TIMER0_B1_ISR_1
+   \   000010   283C         JMP     ??TIMER0_B1_ISR_1
+   \   000012   273C         JMP     ??TIMER0_B1_ISR_1
+   \   000014   263C         JMP     ??TIMER0_B1_ISR_1
+   \   000016   253C         JMP     ??TIMER0_B1_ISR_1
+     76            case 0: break; 
+     77            case 2:     
+     78              if(debounce_sw1++ > 3){
+   \                     ??TIMER0_B1_ISR_4:
+   \   000018   1F42....     MOV.W   &debounce_sw1, R15
+   \   00001C   0E4F         MOV.W   R15, R14
+   \   00001E   1E53         ADD.W   #0x1, R14
+   \   000020   824E....     MOV.W   R14, &debounce_sw1
+   \   000024   2F92         CMP.W   #0x4, R15
+   \   000026   0728         JNC     ??TIMER0_B1_ISR_2
+     79                TB0CCTL1 &= ~CCIE;                  //CCR1 disable interrupt
+   \   000028   B2C010008403 BIC.W   #0x10, &0x384
+     80                P4IFG &= ~SW1;                    //clear my flag
+   \   00002E   E2C33D02     BIC.B   #0x2, &0x23d
+     81                P4IE |= SW1;                        //enable switch interrupt
+   \   000032   E2D33B02     BIS.B   #0x2, &0x23b
+     82              }
+     83              TB0CCR1 += TB0CCR1_INTERVAL;  //add offset to TBCCR0
+   \                     ??TIMER0_B1_ISR_2:
+   \   000036   B25050C39403 ADD.W   #0xc350, &0x394
+     84              break;
+   \   00003C   123C         JMP     ??TIMER0_B1_ISR_1
+     85            case 4:
+     86              if(debounce_sw2++ > 3){
+   \                     ??TIMER0_B1_ISR_5:
+   \   00003E   1F42....     MOV.W   &debounce_sw2, R15
+   \   000042   0E4F         MOV.W   R15, R14
+   \   000044   1E53         ADD.W   #0x1, R14
+   \   000046   824E....     MOV.W   R14, &debounce_sw2
+   \   00004A   2F92         CMP.W   #0x4, R15
+   \   00004C   0728         JNC     ??TIMER0_B1_ISR_3
+     87                TB0CCTL2 &= ~CCIE;                  //CCR2 disable interrupt
+   \   00004E   B2C010008603 BIC.W   #0x10, &0x386
+     88                P2IFG &= ~SW2;                      //clear my flag
+   \   000054   F2C21D02     BIC.B   #0x8, &0x21d
+     89                P2IE |= SW2;                        //enable switch interrupt
+   \   000058   F2D21B02     BIS.B   #0x8, &0x21b
+     90              }
+     91              TB0CCR2 += TB0CCR2_INTERVAL;  //add offset to TBCCR0
+   \                     ??TIMER0_B1_ISR_3:
+   \   00005C   B25050C39603 ADD.W   #0xc350, &0x396
+     92              break;
+     93            case 14: break;                       //overflow
+     94            default: break;                       
+     95            }
+     96          }
+   \                     ??TIMER0_B1_ISR_1:
+   \   000062   1E17         POPM.W  #0x2, R15
+   \   000064   0013         RETI
+   \   000066                REQUIRE _A_TB0CCTL1_L
+   \   000066                REQUIRE _A_PBIFG_L
+   \   000066                REQUIRE _A_PBIE_L
+   \   000066                REQUIRE _A_TB0CCR1_L
+   \   000066                REQUIRE _A_TB0CCTL2_L
+   \   000066                REQUIRE _A_PAIFG_L
+   \   000066                REQUIRE _A_PAIE_L
+   \   000066                REQUIRE _A_TB0CCR2_L
+   \   000066                REQUIRE _A_TB0IV_L
+     97          //------------------------------------------------------------------------------
+     98          
+     99          //TimerB1 interrupts
+    100          //------------------------------------------------------------------------------
+    101          //TimerB1 0 interrupt handler
+    102          #pragma vector = TIMER1_B0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    103          __interrupt void Timer1_B0_ISR(void){
+   \                     Timer1_B0_ISR:
+   \   000000   1F15         PUSHM.W #0x2, R15
+    104            //add what needs to happen in the interrupt
+    105            if(start_wheels++==2){
+   \   000002   5E42....     MOV.B   &start_wheels, R14
+   \   000006   4F4E         MOV.B   R14, R15
+   \   000008   5F53         ADD.B   #0x1, R15
+   \   00000A   C24F....     MOV.B   R15, &start_wheels
+   \   00000E   6E93         CMP.B   #0x2, R14
+   \   000010   0920         JNE     ??Timer1_B0_ISR_0
+    106              RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_MEDIUM;
+   \   000012   B240541F5404 MOV.W   #0x1f54, &0x454
+    107              LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM_MEDIUM;
+   \   000018   B240401F5604 MOV.W   #0x1f40, &0x456
+    108              TB1CCTL0 &= ~CCIE;             //CCR0 disable interrupt
+   \   00001E   B2C01000C203 BIC.W   #0x10, &0x3c2
+    109            }
+    110            TB1CCR0 += TB1CCR0_INTERVAL;        //add offset to TBCCR0
+   \                     ??Timer1_B0_ISR_0:
+   \   000024   B25024F4D203 ADD.W   #0xf424, &0x3d2
+    111          }
+   \   00002A   1E17         POPM.W  #0x2, R15
+   \   00002C   0013         RETI
+   \   00002E                REQUIRE _A_TB3CCR1_L
+   \   00002E                REQUIRE _A_TB3CCR2_L
+   \   00002E                REQUIRE _A_TB1CCTL0_L
+   \   00002E                REQUIRE _A_TB1CCR0_L
+    112          
+    113          //timerB1 1-2, overflow interrupt vector (TBIV) handler
+    114          #pragma vector = TIMER1_B1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    115          __interrupt void TIMER1_B1_ISR(void){
+   \                     TIMER1_B1_ISR:
+   \   000000   3F15         PUSHM.W #0x4, R15
+    116            switch(__even_in_range(TB1IV, 14)){
+   \   000002   1F42EE03     MOV.W   &0x3ee, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for TIMER1_B1_ISR>_0`:
+   \   000008   AD3C         JMP     ??TIMER1_B1_ISR_5
+   \   00000A   063C         JMP     ??TIMER1_B1_ISR_13
+   \   00000C   7A3C         JMP     ??TIMER1_B1_ISR_14
+   \   00000E   AA3C         JMP     ??TIMER1_B1_ISR_5
+   \   000010   A93C         JMP     ??TIMER1_B1_ISR_5
+   \   000012   A83C         JMP     ??TIMER1_B1_ISR_5
+   \   000014   A73C         JMP     ??TIMER1_B1_ISR_5
+   \   000016   A63C         JMP     ??TIMER1_B1_ISR_5
+    117            case 0: break;                        //no interrupt
+    118            case 2:
+    119              new_ADC_reading = TRUE;
+   \                     ??TIMER1_B1_ISR_13:
+   \   000018   D243....     MOV.B   #0x1, &new_ADC_reading
+    120              TB1CCTL1 &= ~CCIE;                  //CCR1 disable interrupt
+   \   00001C   B2C01000C403 BIC.W   #0x10, &0x3c4
+    121              ADC_Left_Array[sample_index]=ADC_Left_Detect;
+   \   000022   1F42....     MOV.W   &sample_index, R15
+   \   000026   0F5F         RLA.W   R15
+   \   000028   9F42........ MOV.W   &ADC_Left_Detect, ADC_Left_Array(R15)
+    122              ADC_Right_Array[sample_index]=ADC_Right_Detect;
+   \   00002E   1F42....     MOV.W   &sample_index, R15
+   \   000032   0F5F         RLA.W   R15
+   \   000034   9F42........ MOV.W   &ADC_Right_Detect, ADC_Right_Array(R15)
+    123              ADC_Thumb_Array[sample_index]=ADC_Thumb_Detect;
+   \   00003A   1F42....     MOV.W   &sample_index, R15
+   \   00003E   0F5F         RLA.W   R15
+   \   000040   9F42........ MOV.W   &ADC_Thumb_Detect, ADC_Thumb_Array(R15)
+    124              
+    125              
+    126              if(sample_index++ < SAMPLE_SIZE){
+   \   000046   1F42....     MOV.W   &sample_index, R15
+   \   00004A   0E4F         MOV.W   R15, R14
+   \   00004C   1E53         ADD.W   #0x1, R14
+   \   00004E   824E....     MOV.W   R14, &sample_index
+   \   000052   3F92         CMP.W   #0x8, R15
+   \   000054   072C         JC      ??TIMER1_B1_ISR_7
+    127                ADCMCTL0 |= ADCINCH_2;              //V_Left_Detect (0x20) Pin 2 A2
+   \   000056   A2D30A07     BIS.W   #0x2, &0x70a
+    128                ADCCTL0 |= ADCENC;                  // Enable Conversions
+   \   00005A   A2D30007     BIS.W   #0x2, &0x700
+    129                ADCCTL0 |= ADCSC;                   // ADC start conversion
+   \   00005E   92D30007     BIS.W   #0x1, &0x700
+   \   000062   4B3C         JMP     ??TIMER1_B1_ISR_6
+    130              }
+    131              else{
+    132                ADC_Left_Detect_Avg = ADC_Left_Array[0]+ADC_Left_Array[1]+ADC_Left_Array[2]+ADC_Left_Array[3]+ADC_Left_Array[4]+ADC_Left_Array[5]+ADC_Left_Array[6]+ADC_Left_Array[7];
+   \                     ??TIMER1_B1_ISR_7:
+   \   000064   1F42....     MOV.W   &ADC_Left_Array, R15
+   \   000068   1F52....     ADD.W   &ADC_Left_Array + 2, R15
+   \   00006C   1F52....     ADD.W   &ADC_Left_Array + 4, R15
+   \   000070   1F52....     ADD.W   &ADC_Left_Array + 6, R15
+   \   000074   1F52....     ADD.W   &ADC_Left_Array + 8, R15
+   \   000078   1F52....     ADD.W   &ADC_Left_Array + 10, R15
+   \   00007C   1F52....     ADD.W   &ADC_Left_Array + 12, R15
+   \   000080   1F52....     ADD.W   &ADC_Left_Array + 14, R15
+   \   000084   824F....     MOV.W   R15, &ADC_Left_Detect_Avg
+    133                ADC_Left_Detect_Avg = ADC_Left_Detect_Avg >> 3;
+   \   000088   1F42....     MOV.W   &ADC_Left_Detect_Avg, R15
+   \   00008C   5F0B         RRUM.W  #0x3, R15
+   \   00008E   824F....     MOV.W   R15, &ADC_Left_Detect_Avg
+    134                ADC_Right_Detect_Avg = ADC_Right_Array[0]+ADC_Right_Array[1]+ADC_Right_Array[2]+ADC_Right_Array[3]+ADC_Right_Array[4]+ADC_Right_Array[5]+ADC_Right_Array[6]+ADC_Right_Array[7];
+   \   000092   1F42....     MOV.W   &ADC_Right_Array, R15
+   \   000096   1F52....     ADD.W   &ADC_Right_Array + 2, R15
+   \   00009A   1F52....     ADD.W   &ADC_Right_Array + 4, R15
+   \   00009E   1F52....     ADD.W   &ADC_Right_Array + 6, R15
+   \   0000A2   1F52....     ADD.W   &ADC_Right_Array + 8, R15
+   \   0000A6   1F52....     ADD.W   &ADC_Right_Array + 10, R15
+   \   0000AA   1F52....     ADD.W   &ADC_Right_Array + 12, R15
+   \   0000AE   1F52....     ADD.W   &ADC_Right_Array + 14, R15
+   \   0000B2   824F....     MOV.W   R15, &ADC_Right_Detect_Avg
+    135                ADC_Right_Detect_Avg = ADC_Right_Detect_Avg >> 3;
+   \   0000B6   1F42....     MOV.W   &ADC_Right_Detect_Avg, R15
+   \   0000BA   5F0B         RRUM.W  #0x3, R15
+   \   0000BC   824F....     MOV.W   R15, &ADC_Right_Detect_Avg
+    136                ADC_Thumb_Detect_Avg = ADC_Thumb_Array[0]+ADC_Thumb_Array[1]+ADC_Thumb_Array[2]+ADC_Thumb_Array[3]+ADC_Thumb_Array[4]+ADC_Thumb_Array[5]+ADC_Thumb_Array[6]+ADC_Thumb_Array[7];
+   \   0000C0   1F42....     MOV.W   &ADC_Thumb_Array, R15
+   \   0000C4   1F52....     ADD.W   &ADC_Thumb_Array + 2, R15
+   \   0000C8   1F52....     ADD.W   &ADC_Thumb_Array + 4, R15
+   \   0000CC   1F52....     ADD.W   &ADC_Thumb_Array + 6, R15
+   \   0000D0   1F52....     ADD.W   &ADC_Thumb_Array + 8, R15
+   \   0000D4   1F52....     ADD.W   &ADC_Thumb_Array + 10, R15
+   \   0000D8   1F52....     ADD.W   &ADC_Thumb_Array + 12, R15
+   \   0000DC   1F52....     ADD.W   &ADC_Thumb_Array + 14, R15
+   \   0000E0   824F....     MOV.W   R15, &ADC_Thumb_Detect_Avg
+    137                ADC_Thumb_Detect_Avg = ADC_Thumb_Detect_Avg >> 3; //divide by 8
+   \   0000E4   1F42....     MOV.W   &ADC_Thumb_Detect_Avg, R15
+   \   0000E8   5F0B         RRUM.W  #0x3, R15
+   \   0000EA   824F....     MOV.W   R15, &ADC_Thumb_Detect_Avg
+    138                sample_index = RESET_STATE;
+   \   0000EE   8243....     MOV.W   #0x0, &sample_index
+    139                changeDisplay = TRUE;
+   \   0000F2   D243....     MOV.B   #0x1, &changeDisplay
+    140                average_flag = TRUE;
+   \   0000F6   D243....     MOV.B   #0x1, &average_flag
+    141              }
+    142          /*
+    143              if((t1ccr2_flag==9)){
+    144                  //when the detectors are  greater than 400
+    145                  if((ADC_Left_Detect>=500)&&(ADC_Right_Detect>=500)){
+    146                    RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOW;
+    147                    LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM_LOW;
+    148                  }
+    149                  //when the detectors are between 499-400 
+    150                  else if((ADC_Left_Detect<500)&&(ADC_Left_Detect>=400)){
+    151                    if((ADC_Left_Detect-ADC_Right_Detect)>75){
+    152                      RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOW;
+    153                      LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM_LOWEST;
+    154                    }
+    155                    else{
+    156                      Motors_Off();
+    157                    }
+    158                  }
+    159                  else if((ADC_Right_Detect<500)&&(ADC_Right_Detect>=400)){
+    160                    if((ADC_Right_Detect-ADC_Left_Detect)>75){
+    161                      RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOWEST;
+    162                      LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM_LOW;
+    163                    }
+    164                    else{
+    165                      Motors_Off();
+    166                    }
+    167                  }
+    168                  //when the detectors are btw 399-300
+    169                  else if((ADC_Left_Detect<400)&&(ADC_Left_Detect>=300)){
+    170                    if((ADC_Left_Detect-ADC_Right_Detect)>75){
+    171                      RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOW;
+    172                      LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM_LOWEST;
+    173                    }
+    174                    else{
+    175                      //Motors_Off();
+    176                      RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOW;
+    177                      LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM_LOWEST;
+    178                    }
+    179                  }
+    180                  else if((ADC_Right_Detect<400)&&(ADC_Right_Detect>=300)){
+    181                    if((ADC_Right_Detect-ADC_Left_Detect)>75){
+    182                      RIGHT_FORWARD_SPEED =RIGHT_FORWARD_PWM_LOWEST;
+    183                      LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM_LOW;
+    184                    }
+    185                    else{
+    186                      Motors_Off();
+    187                    }
+    188                  }
+    189                  //else{Motors_Off();}
+    190                  //when the detectors are btw 300-200
+    191                  else if((ADC_Left_Detect<300)&&(ADC_Left_Detect>=200)){
+    192                    if((ADC_Left_Detect-ADC_Right_Detect)>75){
+    193                      RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOW;
+    194                      LEFT_FORWARD_SPEED = WHEEL_OFF;
+    195                    }
+    196                    else{
+    197                      Motors_Off();
+    198                    }
+    199                  }
+    200                  else if((ADC_Right_Detect<300)&&(ADC_Right_Detect>=200)){
+    201                    if((ADC_Right_Detect-ADC_Left_Detect)>75){
+    202                      RIGHT_FORWARD_SPEED = WHEEL_OFF;
+    203                      LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM_LOW;
+    204                    }
+    205                    else{
+    206                      Motors_Off();
+    207                    }
+    208                  }
+    209                  //when the detctors are btw 200-100
+    210                  else if((ADC_Left_Detect<200)&&(ADC_Left_Detect>=100)){
+    211                    if((ADC_Left_Detect>ADC_Right_Detect)){
+    212                      RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOW;
+    213                      LEFT_FORWARD_SPEED = WHEEL_OFF;
+    214                    }
+    215                    else{
+    216                      Motors_Off();
+    217                    }
+    218                  }
+    219                  else if((ADC_Right_Detect<200)&&(ADC_Right_Detect>=100)){
+    220                    if((ADC_Right_Detect>ADC_Left_Detect)){
+    221                      RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOWEST;
+    222                      LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM_LOW;
+    223                    }
+    224                    else{
+    225                      Motors_Off();
+    226                    }
+    227                  }
+    228                  //new
+    229                  else if((ADC_Right_Detect<100)&&(ADC_Right_Detect>=70)){
+    230                    if((ADC_Right_Detect>ADC_Left_Detect)){
+    231                      RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOWEST;
+    232                      LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM_LOW;
+    233                    }
+    234                    else{
+    235                      Motors_Off();
+    236                    }
+    237                  }
+    238                  else if((ADC_Left_Detect<100)&&(ADC_Left_Detect>=70)){
+    239                    if((ADC_Left_Detect>ADC_Right_Detect)){
+    240                      RIGHT_FORWARD_SPEED = LEFT_FORWARD_PWM_LOW;
+    241                      LEFT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOWEST;
+    242                    }
+    243                    else{
+    244                      Motors_Off();
+    245                    }
+    246                  }
+    247                  else{
+    248                    Motors_Off();
+    249                  }   
+    250              }*/
+    251              TB1CCR1 += TB1CCR1_INTERVAL;
+   \                     ??TIMER1_B1_ISR_6:
+   \   0000FA   B250350CD403 ADD.W   #0xc35, &0x3d4
+    252              break;
+   \   000100   313C         JMP     ??TIMER1_B1_ISR_5
+    253            case 4:
+    254              switch(t1ccr2_counter){
+   \                     ??TIMER1_B1_ISR_14:
+   \   000102   1F42....     MOV.W   &t1ccr2_counter, R15
+   \   000106   0F83         SUB.W   #0x0, R15
+   \   000108   2824         JEQ     ??TIMER1_B1_ISR_4
+   \   00010A   2F82         SUB.W   #0x4, R15
+   \   00010C   0D24         JEQ     ??TIMER1_B1_ISR_8
+   \   00010E   3F800300     SUB.W   #0x3, R15
+   \   000112   1024         JEQ     ??TIMER1_B1_ISR_9
+   \   000114   1F83         SUB.W   #0x1, R15
+   \   000116   1424         JEQ     ??TIMER1_B1_ISR_10
+   \   000118   2F83         SUB.W   #0x2, R15
+   \   00011A   1624         JEQ     ??TIMER1_B1_ISR_11
+   \   00011C   2F83         SUB.W   #0x2, R15
+   \   00011E   1724         JEQ     ??TIMER1_B1_ISR_12
+   \   000120   1F83         SUB.W   #0x1, R15
+   \   000122   1B24         JEQ     ??TIMER1_B1_ISR_4
+   \   000124   1F83         SUB.W   #0x1, R15
+   \   000126   193C         JMP     ??TIMER1_B1_ISR_4
+    255              case 0:break;
+    256              case 4:
+    257                Reverse_Left_Motor_On();
+   \                     ??TIMER1_B1_ISR_8:
+   \   000128   ........     CALLA   #Reverse_Left_Motor_On
+    258                RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_LOW;
+   \   00012C   B24064195404 MOV.W   #0x1964, &0x454
+    259                break;
+   \   000132   133C         JMP     ??TIMER1_B1_ISR_4
+    260              case 7://****************************************/
+    261                Motors_Off();
+   \                     ??TIMER1_B1_ISR_9:
+   \   000134   ........     CALLA   #Motors_Off
+    262                 TB1CCTL2 &= ~CCIE;
+   \   000138   B2C01000C603 BIC.W   #0x10, &0x3c6
+    263                //TB1CCTL2 &= ~CCIE;
+    264                break;
+   \   00013E   0D3C         JMP     ??TIMER1_B1_ISR_4
+    265              case 8:
+    266                RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM_MEDIUM;
+   \                     ??TIMER1_B1_ISR_10:
+   \   000140   B240541F5404 MOV.W   #0x1f54, &0x454
+    267                //t1ccr2_flag= 7;
+    268                //TB1CCTL2 &= ~CCIE;
+    269                break;
+   \   000146   093C         JMP     ??TIMER1_B1_ISR_4
+    270              case 10:
+    271                Motors_Off();
+   \                     ??TIMER1_B1_ISR_11:
+   \   000148   ........     CALLA   #Motors_Off
+    272                //TB1CCTL2 &= ~CCIE;
+    273                break;
+   \   00014C   063C         JMP     ??TIMER1_B1_ISR_4
+    274              case 12:
+    275                t1ccr2_flag= 9;
+   \                     ??TIMER1_B1_ISR_12:
+   \   00014E   B2400900.... MOV.W   #0x9, &t1ccr2_flag
+    276                TB1CCTL2 &= ~CCIE;
+   \   000154   B2C01000C603 BIC.W   #0x10, &0x3c6
+    277                break;
+    278              case 13:
+    279                break;
+    280              case 14://************************
+    281                break;
+    282              default:break;
+    283              }
+    284              t1ccr2_counter++;
+   \                     ??TIMER1_B1_ISR_4:
+   \   00015A   9253....     ADD.W   #0x1, &t1ccr2_counter
+    285              TB1CCR2 += TB1CCR2_INTERVAL;        //Add offset to TBCCR2
+   \   00015E   B25024F4D603 ADD.W   #0xf424, &0x3d6
+    286              break;
+    287            case 14: break;                       //overflow
+    288            default: break;                       
+    289            }
+    290          }
+   \                     ??TIMER1_B1_ISR_5:
+   \   000164   3C17         POPM.W  #0x4, R15
+   \   000166   0013         RETI
+   \   000168                REQUIRE _A_TB1CCTL1_L
+   \   000168                REQUIRE _A_ADCMCTL0_L
+   \   000168                REQUIRE _A_ADCCTL0_L
+   \   000168                REQUIRE _A_TB1CCR1_L
+   \   000168                REQUIRE _A_TB3CCR1_L
+   \   000168                REQUIRE _A_TB1CCTL2_L
+   \   000168                REQUIRE _A_TB1CCR2_L
+   \   000168                REQUIRE _A_TB1IV_L
+    291          //------------------------------------------------------------------------------
+    292          
+    293          //TimerB2 interrupts
+    294          //------------------------------------------------------------------------------
+    295          //TimerB2 0 interrupt handler
+    296          #pragma vector = TIMER2_B0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    297          __interrupt void Timer2_B0_ISR(void){
+   \                     Timer2_B0_ISR:
+    298            //add what needs to happen in the interrupt
+    299            Time_Sequence_Aclk++;
+   \   000000   9253....     ADD.W   #0x1, &Time_Sequence_Aclk
+    300            //TB2CCTL0 &= ~CCIE;             //CCR0 disable interrupt
+    301            TB2CCR0 += TB2CCR0_INTERVAL;  //add offset to TBCCR0
+   \   000004   B25000021204 ADD.W   #0x200, &0x412
+    302           
+    303          }
+   \   00000A   0013         RETI
+   \   00000C                REQUIRE _A_TB2CCR0_L
+    304          
+    305          //timerB2 1-2, overflow interrupt vector (TBIV) handler
+    306          #pragma vector = TIMER2_B1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    307          __interrupt void TIMER2_B1_ISR(void){
+   \                     TIMER2_B1_ISR:
+   \   000000   0F12         PUSH.W  R15
+    308            switch(__even_in_range(TB2IV, 14)){
+   \   000002   1F422E04     MOV.W   &0x42e, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for TIMER2_B1_ISR>_0`:
+   \   000008   183C         JMP     ??TIMER2_B1_ISR_2
+   \   00000A   063C         JMP     ??TIMER2_B1_ISR_4
+   \   00000C   163C         JMP     ??TIMER2_B1_ISR_2
+   \   00000E   153C         JMP     ??TIMER2_B1_ISR_2
+   \   000010   143C         JMP     ??TIMER2_B1_ISR_2
+   \   000012   133C         JMP     ??TIMER2_B1_ISR_2
+   \   000014   123C         JMP     ??TIMER2_B1_ISR_2
+   \   000016   113C         JMP     ??TIMER2_B1_ISR_2
+    309            case 0: break;                        //no interrupt
+    310            case 2:
+    311              //decrement the DAC voltage to 1000
+    312              if(DAC_data > 1000){  // after running check
+   \                     ??TIMER2_B1_ISR_4:
+   \   000018   B290E903.... CMP.W   #0x3e9, &DAC_data
+   \   00001E   0A28         JNC     ??TIMER2_B1_ISR_3
+    313                DAC_data = DAC_data - 100;
+   \   000020   B2509CFF.... ADD.W   #0xff9c, &DAC_data
+    314                SAC3DAT = DAC_data;
+   \   000026   9242....B60C MOV.W   &DAC_data, &0xcb6
+    315                TB2CCR1 += TB2CCR1_INTERVAL;        // Add offset to TBCCR1
+   \   00002C   B25000021404 ADD.W   #0x200, &0x414
+   \   000032   033C         JMP     ??TIMER2_B1_ISR_2
+    316              }
+    317              else{
+    318                TB2CCTL1 &= ~CCIE;                  // CCR0 disable interrupt
+   \                     ??TIMER2_B1_ISR_3:
+   \   000034   B2C010000404 BIC.W   #0x10, &0x404
+    319              }
+    320              break;
+    321            case 4:
+    322              //TB2CCR2 += TB2CCR2_INTERVAL;        //Add offset to TBCCR2
+    323              break;
+    324            case 14: break;                       //overflow
+    325            default: break;                       
+    326            }
+    327          }
+   \                     ??TIMER2_B1_ISR_2:
+   \   00003A   3F41         POP.W   R15
+   \   00003C   0013         RETI
+   \   00003E                REQUIRE _A_SAC3DAT_L
+   \   00003E                REQUIRE _A_TB2CCR1_L
+   \   00003E                REQUIRE _A_TB2CCTL1_L
+   \   00003E                REQUIRE _A_TB2IV_L
+    328          //------------------------------------------------------------------------------
+    329          
+    330          //TimerB3 interrupts
+    331          //------------------------------------------------------------------------------
+    332          //TimerB3 0 interrupt handler
+    333          #pragma vector = TIMER3_B0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    334          __interrupt void Timer3_B0_ISR(void){
+   \                     Timer3_B0_ISR:
+    335            //add what needs to happen in the interrupt
+    336          }
+   \   000000   0013         RETI
+    337          
+    338          //timerB3 1-2, overflow interrupt vector (TBIV) handler
+    339          #pragma vector = TIMER3_B1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    340          __interrupt void TIMER3_B1_ISR(void){
+   \                     TIMER3_B1_ISR:
+   \   000000   0F12         PUSH.W  R15
+    341            switch(__even_in_range(TB3IV, 14)){
+   \   000002   1F426E04     MOV.W   &0x46e, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for TIMER3_B1_ISR>_0`:
+   \   000008   073C         JMP     ??TIMER3_B1_ISR_1
+   \   00000A   063C         JMP     ??TIMER3_B1_ISR_1
+   \   00000C   053C         JMP     ??TIMER3_B1_ISR_1
+   \   00000E   043C         JMP     ??TIMER3_B1_ISR_1
+   \   000010   033C         JMP     ??TIMER3_B1_ISR_1
+   \   000012   023C         JMP     ??TIMER3_B1_ISR_1
+   \   000014   013C         JMP     ??TIMER3_B1_ISR_1
+   \   000016   003C         JMP     ??TIMER3_B1_ISR_1
+    342            case 0: break;
+    343            case 2: break;         //no interrupt for TBCCR1
+    344            case 4: break;         //no interrupt for TBCCR2
+    345            case 6: break;         //no interrupt for TBCCR3
+    346            case 8: break;         //no interrupt for TBCCR4
+    347            case 10: break;       //no interrupt for TBCCR5
+    348            case 12: break;       //no interrupt for TBCCR5
+    349            case 14: break;       //overflow
+    350            default: break;                       
+    351            }
+    352          }
+   \                     ??TIMER3_B1_ISR_1:
+   \   000018   3F41         POP.W   R15
+   \   00001A   0013         RETI
+   \   00001C                REQUIRE _A_TB3IV_L
+
+   \                                 In  segment INTVEC, offset 0x48, root
+   \                     `??TIMER3_B1_ISR::??INTVEC 72`:
+   \   000048   ....         DC16    TIMER3_B1_ISR
+
+   \                                 In  segment INTVEC, offset 0x4a, root
+   \                     `??Timer3_B0_ISR::??INTVEC 74`:
+   \   00004A   ....         DC16    Timer3_B0_ISR
+
+   \                                 In  segment INTVEC, offset 0x4c, root
+   \                     `??TIMER2_B1_ISR::??INTVEC 76`:
+   \   00004C   ....         DC16    TIMER2_B1_ISR
+
+   \                                 In  segment INTVEC, offset 0x4e, root
+   \                     `??Timer2_B0_ISR::??INTVEC 78`:
+   \   00004E   ....         DC16    Timer2_B0_ISR
+
+   \                                 In  segment INTVEC, offset 0x50, root
+   \                     `??TIMER1_B1_ISR::??INTVEC 80`:
+   \   000050   ....         DC16    TIMER1_B1_ISR
+
+   \                                 In  segment INTVEC, offset 0x52, root
+   \                     `??Timer1_B0_ISR::??INTVEC 82`:
+   \   000052   ....         DC16    Timer1_B0_ISR
+
+   \                                 In  segment INTVEC, offset 0x54, root
+   \                     `??TIMER0_B1_ISR::??INTVEC 84`:
+   \   000054   ....         DC16    TIMER0_B1_ISR
+
+   \                                 In  segment INTVEC, offset 0x56, root
+   \                     `??Timer0_B0_ISR::??INTVEC 86`:
+   \   000056   ....         DC16    Timer0_B0_ISR
+    353          //------------------------------------------------------------------------------
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      8   TIMER0_B1_ISR
+     12   TIMER1_B1_ISR
+       12   -> Motors_Off
+       12   -> Reverse_Left_Motor_On
+      6   TIMER2_B1_ISR
+      6   TIMER3_B1_ISR
+      8   Timer0_B0_ISR
+      8   Timer1_B0_ISR
+      4   Timer2_B0_ISR
+      4   Timer3_B0_ISR
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      16  ADC_Left_Array
+      16  ADC_Right_Array
+      16  ADC_Thumb_Array
+     102  TIMER0_B1_ISR
+       2  TIMER0_B1_ISR::??INTVEC 84
+     360  TIMER1_B1_ISR
+       2  TIMER1_B1_ISR::??INTVEC 80
+      62  TIMER2_B1_ISR
+       2  TIMER2_B1_ISR::??INTVEC 76
+      28  TIMER3_B1_ISR
+       2  TIMER3_B1_ISR::??INTVEC 72
+       2  Time_Sequence
+       2  Time_Sequence_Aclk
+      60  Timer0_B0_ISR
+       2  Timer0_B0_ISR::??INTVEC 86
+      46  Timer1_B0_ISR
+       2  Timer1_B0_ISR::??INTVEC 82
+      12  Timer2_B0_ISR
+       2  Timer2_B0_ISR::??INTVEC 78
+       2  Timer3_B0_ISR
+       2  Timer3_B0_ISR::??INTVEC 74
+       2  _A_ADCCTL0_L
+       2  _A_ADCMCTL0_L
+       2  _A_PAIE_L
+       2  _A_PAIFG_L
+       2  _A_PBIE_L
+       2  _A_PBIFG_L
+       2  _A_SAC3DAT_L
+       2  _A_TB0CCR0_L
+       2  _A_TB0CCR1_L
+       2  _A_TB0CCR2_L
+       2  _A_TB0CCTL1_L
+       2  _A_TB0CCTL2_L
+       2  _A_TB0IV_L
+       2  _A_TB1CCR0_L
+       2  _A_TB1CCR1_L
+       2  _A_TB1CCR2_L
+       2  _A_TB1CCTL0_L
+       2  _A_TB1CCTL1_L
+       2  _A_TB1CCTL2_L
+       2  _A_TB1IV_L
+       2  _A_TB2CCR0_L
+       2  _A_TB2CCR1_L
+       2  _A_TB2CCTL1_L
+       2  _A_TB2IV_L
+       2  _A_TB3CCR1_L
+       2  _A_TB3CCR2_L
+       2  _A_TB3IV_L
+       1  changeDisplay
+       2  display_changer
+       1  one_time
+       2  sample_index
+       2  t1ccr2_counter
+       2  t1ccr2_flag
+
+ 
+  54 bytes in segment DATA16_AN
+  62 bytes in segment DATA16_Z
+  16 bytes in segment INTVEC
+ 672 bytes in segment ISR_CODE
+ 
+ 672 bytes of CODE  memory
+   0 bytes of CONST memory (+ 16 bytes shared)
+  62 bytes of DATA  memory (+ 54 bytes shared)
+
+Errors: none
+Warnings: none

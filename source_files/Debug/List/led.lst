@@ -1,0 +1,155 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.20.1.997/W32 for MSP430           06/Apr/2021  00:13:16
+# Copyright 1996-2020 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.20
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\led.c
+#    Command line  =  
+#        -f C:\Users\loyda\AppData\Local\Temp\EW55F9.tmp
+#        ("C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\led.c" -lC "C:\Users\loyda\OneDrive\Documents\CLASS
+#        FOLDERS\ECE 306\ECE 306 CODE\Project_07\Debug\List" -o
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj" --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --debug -D__MSP430FR2355__ -e --double=32
+#        --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.4\430\lib\dlib\dl430xlsfn.h" -I ./ --core=430X --data_model=small
+#        -On --multiplier=32 --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List\led.lst
+#    Object file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj\led.r43
+#
+###############################################################################
+
+C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306 CODE\Project_07\led.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains several functions that control the LEDs
+      4          //
+      5          //
+      6          //  Loyda Yusufova
+      7          //  Febreuary 12
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.20.1)
+      9          //------------------------------------------------------------------------------
+     10          #include  "functions.h"
+     11          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x202
+   \   union <unnamed> _A_PAOUT_L
+   \                     _A_PAOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+     12          #include "ports.h"
+     13          
+     14          //INITIALIZING LED's (turns them on)
+     15          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     16          void Init_LEDs(void){
+   \                     Init_LEDs:
+     17              // LED Configurations
+     18              // Turns off both LEDs
+     19              P1OUT &= ~RED_LED;
+   \   000000   D2C30202     BIC.B   #0x1, &0x202
+     20              P6OUT &= ~GRN_LED;
+   \   000004   F2C040004302 BIC.B   #0x40, &0x243
+     21          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_PAOUT_L
+   \   00000C                REQUIRE _A_PCOUT_L
+     22          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     23          void Red_LED_Off(void){
+   \                     Red_LED_Off:
+     24              // Turns off red LED
+     25              P1OUT &= ~RED_LED;
+   \   000000   D2C30202     BIC.B   #0x1, &0x202
+     26          }
+   \   000004   1001         RETA
+   \   000006                REQUIRE _A_PAOUT_L
+     27          
+
+   \                                 In  segment CODE, align 2
+     28          void Red_LED_On(void){
+   \                     Red_LED_On:
+     29              // Turns on red LED
+     30              P1OUT |= RED_LED;
+   \   000000   D2D30202     BIS.B   #0x1, &0x202
+     31          }
+   \   000004   1001         RETA
+   \   000006                REQUIRE _A_PAOUT_L
+     32          
+
+   \                                 In  segment CODE, align 2
+     33          void GRN_LED_Off(void){
+   \                     GRN_LED_Off:
+     34              // Turns off green LED
+     35              P6OUT &= ~GRN_LED;
+   \   000000   F2C040004302 BIC.B   #0x40, &0x243
+     36          }
+   \   000006   1001         RETA
+   \   000008                REQUIRE _A_PCOUT_L
+     37          
+
+   \                                 In  segment CODE, align 2
+     38          void GRN_LED_On(void){
+   \                     GRN_LED_On:
+     39              // Turns on green LED
+     40              P6OUT |= GRN_LED;
+   \   000000   F2D040004302 BIS.B   #0x40, &0x243
+     41          }
+   \   000006   1001         RETA
+   \   000008                REQUIRE _A_PCOUT_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   GRN_LED_Off
+      4   GRN_LED_On
+      4   Init_LEDs
+      4   Red_LED_Off
+      4   Red_LED_On
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       8  GRN_LED_Off
+       8  GRN_LED_On
+      12  Init_LEDs
+       6  Red_LED_Off
+       6  Red_LED_On
+       2  _A_PAOUT_L
+       2  _A_PCOUT_L
+
+ 
+ 40 bytes in segment CODE
+  4 bytes in segment DATA16_AN
+ 
+ 40 bytes of CODE memory
+  0 bytes of DATA memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: none

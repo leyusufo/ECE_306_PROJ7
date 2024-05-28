@@ -1,0 +1,251 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.20.1.997/W32 for MSP430           23/Apr/2021  20:27:56
+# Copyright 1996-2020 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.20
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\DAC.c
+#    Command line  =  
+#        -f C:\Users\loyda\AppData\Local\Temp\EW16D5.tmp
+#        ("C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\DAC.c" -lC "C:\Users\loyda\OneDrive\Documents\CLASS
+#        FOLDERS\ECE 306\ECE 306 CODE\Project_07\Debug\List" -o
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj" --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --debug -D__MSP430FR2355__ -e --double=32
+#        --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.4\430\lib\dlib\dl430xlsfn.h" -I ./ --core=430X --data_model=small
+#        -On --multiplier=32 --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List\DAC.lst
+#    Object file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj\DAC.r43
+#
+###############################################################################
+
+C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306 CODE\Project_07\DAC.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains DAC functions
+      4          //
+      5          //
+      6          //  Loyda Yusufova
+      7          //  2021
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include  "functions.h"
+     12          #include  "macros.h"
+     13          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x22a
+   \   union <unnamed> _A_PBSEL0_L
+   \                     _A_PBSEL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x22c
+   \   union <unnamed> _A_PBSEL1_L
+   \                     _A_PBSEL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x120
+   \   union <unnamed> _A_PMMCTL0_L
+   \                     _A_PMMCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x124
+   \   union <unnamed> _A_PMMCTL2_L
+   \                     _A_PMMCTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0xcb0
+   \   union <unnamed> _A_SAC3OA_L
+   \                     _A_SAC3OA_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0xcb2
+   \   union <unnamed> _A_SAC3PGA_L
+   \                     _A_SAC3PGA_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0xcb4
+   \   union <unnamed> _A_SAC3DAC_L
+   \                     _A_SAC3DAC_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0xcb6
+   \   union <unnamed> _A_SAC3DAT_L
+   \                     _A_SAC3DAT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x404
+   \   union <unnamed> _A_TB2CCTL1_L
+   \                     _A_TB2CCTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x410
+   \   union <unnamed> _A_TB2R_L
+   \                     _A_TB2R_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x414
+   \   union <unnamed> _A_TB2CCR1_L
+   \                     _A_TB2CCR1_L:
+   \   000000                DS8 2
+     14          #include "ports.h"
+     15          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          unsigned int DAC_data=RESET_STATE;
+   \                     DAC_data:
+   \   000000                DS8 2
+     17          
+     18          //DAC initialization
+     19          //------------------------------------------------------------------------------
+     20          //function that sets the internal reference for the DAC
+
+   \                                 In  segment CODE, align 2
+     21          void Init_REF(void){
+   \                     Init_REF:
+     22            // Configure reference module
+     23            PMMCTL0_H = PMMPW_H;          // Unlock the PMM registers
+   \   000000   F240A5002101 MOV.B   #0xa5, &0x121
+     24            PMMCTL2 = INTREFEN;           // Enable internal reference
+   \   000006   92432401     MOV.W   #0x1, &0x124
+     25            PMMCTL2 |= REFVSEL_2;         // Select 2.5V reference
+   \   00000A   B2D020002401 BIS.W   #0x20, &0x124
+     26            while(!(PMMCTL2 & REFGENRDY)){ // Poll till internal reference settles
+   \                     ??Init_REF_0:
+   \   000010   B2B000102401 BIT.W   #0x1000, &0x124
+   \   000016   FC2B         JNC     ??Init_REF_0
+     27              ;
+     28            }
+     29            // Using a while statement is not usually recommended without an exit strategy.
+     30            // This while statement is the suggested operation to allow the reference to settle.
+     31          }
+   \   000018   1001         RETA
+   \   00001A                REQUIRE _A_PMMCTL0_L
+   \   00001A                REQUIRE _A_PMMCTL2_L
+     32          
+     33          //function that intitializes the DAC
+
+   \                                 In  segment CODE, align 2
+     34          void Init_DAC(void){
+   \                     Init_DAC:
+     35            DAC_data = INITIAL_VAL_DAC;   // Value between 0x000 and 0x0FFF
+   \   000000   B240A00F.... MOV.W   #0xfa0, &DAC_data
+     36            SAC3DAT = DAC_data;           // Initial DAC data-this is the initial value for the DAC
+   \   000006   9242....B60C MOV.W   &DAC_data, &0xcb6
+     37            SAC3DAC = DACSREF_1;          // Select int Vref as DAC reference
+   \   00000C   B2400010B40C MOV.W   #0x1000, &0xcb4
+     38            SAC3DAC |= DACLSEL_0;         // DAC latch loads when DACDAT written
+   \   000012   9242B40CB40C MOV.W   &0xcb4, &0xcb4
+     39            // SAC3DAC |= DACIE;          // generate an interrupt
+     40            
+     41            // This reconfigures th port pins for DAC
+     42            P3SEL0 |=  DAC_CNTL;                // DAC_CNTL DAC operation
+   \   000018   F2D020002A02 BIS.B   #0x20, &0x22a
+     43            P3SEL1 &= ~DAC_CNTL;                // DAC_CNTL DAC operation
+   \   00001E   F2C020002C02 BIC.B   #0x20, &0x22c
+     44            
+     45            SAC3DAC |= DACEN;             // Enable DAC
+   \   000024   92D3B40C     BIS.W   #0x1, &0xcb4
+     46            SAC3OA = NMUXEN;              // SAC Negative input MUX controL
+   \   000028   B2408000B00C MOV.W   #0x80, &0xcb0
+     47            SAC3OA |= PMUXEN;             // SAC Positive input MUX control 
+   \   00002E   B2D2B00C     BIS.W   #0x8, &0xcb0
+     48            SAC3OA |= PSEL_1;             // 10-bit reference DAC source selected
+   \   000032   92D3B00C     BIS.W   #0x1, &0xcb0
+     49            SAC3OA |= NSEL_1;             // Select negative pin input
+   \   000036   B2D01000B00C BIS.W   #0x10, &0xcb0
+     50            SAC3OA |= OAPM;               // Select low speed and low power mode
+   \   00003C   B2D00002B00C BIS.W   #0x200, &0xcb0
+     51            SAC3PGA = MSEL_1;             // Set OA as buffer mode 
+   \   000042   9243B20C     MOV.W   #0x1, &0xcb2
+     52            SAC3OA |= SACEN;              // Enable SAC
+   \   000046   B2D00004B00C BIS.W   #0x400, &0xcb0
+     53            SAC3OA |= OAEN;               // Enable OA
+   \   00004C   B2D00001B00C BIS.W   #0x100, &0xcb0
+     54          }
+   \   000052   1001         RETA
+   \   000054                REQUIRE _A_SAC3DAT_L
+   \   000054                REQUIRE _A_SAC3DAC_L
+   \   000054                REQUIRE _A_PBSEL0_L
+   \   000054                REQUIRE _A_PBSEL1_L
+   \   000054                REQUIRE _A_SAC3OA_L
+   \   000054                REQUIRE _A_SAC3PGA_L
+     55          //------------------------------------------------------------------------------
+     56          
+     57          //routine that sets the DAC to 2000
+     58          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     59          void set_DAC_1200(void){
+   \                     set_DAC_1200:
+     60            TB2CCTL1 &= ~CCIFG;             //clear possible pending interrupt
+   \   000000   92C30404     BIC.W   #0x1, &0x404
+     61            TB2CCR1 = TB2R + TB2CCR1_INTERVAL;   //CCR2
+   \   000004   1F421004     MOV.W   &0x410, R15
+   \   000008   3F500002     ADD.W   #0x200, R15
+   \   00000C   824F1404     MOV.W   R15, &0x414
+     62            TB2CCTL1 |= CCIE;             //CCR2 enable interrupt
+   \   000010   B2D010000404 BIS.W   #0x10, &0x404
+     63          }
+   \   000016   1001         RETA
+   \   000018                REQUIRE _A_TB2CCTL1_L
+   \   000018                REQUIRE _A_TB2CCR1_L
+   \   000018                REQUIRE _A_TB2R_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_DAC
+      4   Init_REF
+      4   set_DAC_1200
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  DAC_data
+      84  Init_DAC
+      26  Init_REF
+       2  _A_PBSEL0_L
+       2  _A_PBSEL1_L
+       2  _A_PMMCTL0_L
+       2  _A_PMMCTL2_L
+       2  _A_SAC3DAC_L
+       2  _A_SAC3DAT_L
+       2  _A_SAC3OA_L
+       2  _A_SAC3PGA_L
+       2  _A_TB2CCR1_L
+       2  _A_TB2CCTL1_L
+       2  _A_TB2R_L
+      24  set_DAC_1200
+
+ 
+ 134 bytes in segment CODE
+  22 bytes in segment DATA16_AN
+   2 bytes in segment DATA16_Z
+ 
+ 134 bytes of CODE memory
+   2 bytes of DATA memory (+ 22 bytes shared)
+
+Errors: none
+Warnings: none

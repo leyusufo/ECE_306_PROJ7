@@ -1,0 +1,45 @@
+#Generating source browse information for project Project_07
+
+
+#Abbreviations
+cc = C$:\Program$ Files$ (x86)\IAR$ Systems\Embedded$ Workbench$ 8.4\common\bin\SourceIndexer.exe
+ll = C$:\Program$ Files$ (x86)\IAR$ Systems\Embedded$ Workbench$ 8.4\common\bin\PbdLink.exe
+bd = C$:\Program$ Files$ (x86)\IAR$ Systems\Embedded$ Workbench$ 8.4\common\bin\makeBrowseData.exe
+
+
+
+#Rules
+rule index
+  depfile = $out.dep
+  command = $cc -out=$out -f $in
+rule link
+  command = $ll -M $out $in
+rule browsedata
+  command = $bd $in -output  $out
+
+
+
+#Build steps
+build ADC.pbi : index ADC.xcl
+build clocks.pbi : index clocks.xcl
+build conversions.pbi : index conversions.xcl
+build DAC.pbi : index DAC.xcl
+build display_message.pbi : index display_message.xcl
+build init.pbi : index init.xcl
+build interrupt_ADC.pbi : index interrupt_ADC.xcl
+build interrupt_switch.pbi : index interrupt_switch.xcl
+build interrupt_timers.pbi : index interrupt_timers.xcl
+build led.pbi : index led.xcl
+build main.pbi : index main.xcl
+build Motors.pbi : index Motors.xcl
+build ports.pbi : index ports.xcl
+build system.pbi : index system.xcl
+build timers.pbi : index timers.xcl
+build Project_07_part0.pbi : link ADC.pbi clocks.pbi conversions.pbi DAC.pbi
+build Project_07_part1.pbi : link display_message.pbi init.pbi interrupt_ADC.pbi interrupt_switch.pbi
+build Project_07_part2.pbi : link interrupt_timers.pbi led.pbi main.pbi Motors.pbi
+build Project_07_part3.pbi : link ports.pbi system.pbi timers.pbi
+build Project_07.pbd : link Project_07_part0.pbi Project_07_part1.pbi Project_07_part2.pbi Project_07_part3.pbi
+build Project_07.pbw : browsedata Project_07.pbd
+
+

@@ -1,0 +1,410 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.20.1.997/W32 for MSP430           23/Apr/2021  20:27:56
+# Copyright 1996-2020 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.20
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Motors.c
+#    Command line  =  
+#        -f C:\Users\loyda\AppData\Local\Temp\EW1813.tmp
+#        ("C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Motors.c" -lC "C:\Users\loyda\OneDrive\Documents\CLASS
+#        FOLDERS\ECE 306\ECE 306 CODE\Project_07\Debug\List" -o
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj" --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --debug -D__MSP430FR2355__ -e --double=32
+#        --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.4\430\lib\dlib\dl430xlsfn.h" -I ./ --core=430X --data_model=small
+#        -On --multiplier=32 --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List\Motors.lst
+#    Object file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj\Motors.r43
+#
+###############################################################################
+
+C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306 CODE\Project_07\Motors.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the routines for motors
+      4          //
+      5          //
+      6          //  Loyda Yusufova
+      7          //  2021
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "functions.h"
+     13          #include  "macros.h"
+     14          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x3c6
+   \   union <unnamed> _A_TB1CCTL2_L
+   \                     _A_TB1CCTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3d0
+   \   union <unnamed> _A_TB1R_L
+   \                     _A_TB1R_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3d6
+   \   union <unnamed> _A_TB1CCR2_L
+   \                     _A_TB1CCR2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x454
+   \   union <unnamed> _A_TB3CCR1_L
+   \                     _A_TB3CCR1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x456
+   \   union <unnamed> _A_TB3CCR2_L
+   \                     _A_TB3CCR2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x458
+   \   union <unnamed> _A_TB3CCR3_L
+   \                     _A_TB3CCR3_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x45a
+   \   union <unnamed> _A_TB3CCR4_L
+   \                     _A_TB3CCR4_L:
+   \   000000                DS8 2
+     15          //#include <string.h>
+     16          //#include "ports.h"
+     17          
+     18          extern char start_wheels;
+     19          extern unsigned int t1ccr2_counter;
+     20          
+     21          //motor initialization
+     22          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     23          void Init_Motors(void){
+   \                     Init_Motors:
+     24            RIGHT_FORWARD_SPEED = WHEEL_OFF;
+   \   000000   82435404     MOV.W   #0x0, &0x454
+     25            LEFT_FORWARD_SPEED = WHEEL_OFF;
+   \   000004   82435604     MOV.W   #0x0, &0x456
+     26            RIGHT_REVERSE_SPEED = WHEEL_OFF; 
+   \   000008   82435804     MOV.W   #0x0, &0x458
+     27            LEFT_REVERSE_SPEED = WHEEL_OFF;
+   \   00000C   82435A04     MOV.W   #0x0, &0x45a
+     28          }
+   \   000010   1001         RETA
+   \   000012                REQUIRE _A_TB3CCR1_L
+   \   000012                REQUIRE _A_TB3CCR2_L
+   \   000012                REQUIRE _A_TB3CCR3_L
+   \   000012                REQUIRE _A_TB3CCR4_L
+     29          //------------------------------------------------------------------------------
+     30          
+     31          //all motors off
+
+   \                                 In  segment CODE, align 2
+     32          void Motors_Off(void){
+   \                     Motors_Off:
+     33            RIGHT_FORWARD_SPEED = WHEEL_OFF;
+   \   000000   82435404     MOV.W   #0x0, &0x454
+     34            LEFT_FORWARD_SPEED = WHEEL_OFF;
+   \   000004   82435604     MOV.W   #0x0, &0x456
+     35            RIGHT_REVERSE_SPEED = WHEEL_OFF; 
+   \   000008   82435804     MOV.W   #0x0, &0x458
+     36            LEFT_REVERSE_SPEED = WHEEL_OFF;
+   \   00000C   82435A04     MOV.W   #0x0, &0x45a
+     37          }
+   \   000010   1001         RETA
+   \   000012                REQUIRE _A_TB3CCR1_L
+   \   000012                REQUIRE _A_TB3CCR2_L
+   \   000012                REQUIRE _A_TB3CCR3_L
+   \   000012                REQUIRE _A_TB3CCR4_L
+     38          //forward motors on
+
+   \                                 In  segment CODE, align 2
+     39          void Forward_Motors_On(void){
+   \                     Forward_Motors_On:
+     40            RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM;
+   \   000000   B2401A275404 MOV.W   #0x271a, &0x454
+     41            LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM;
+   \   000006   B24010275604 MOV.W   #0x2710, &0x456
+     42          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_TB3CCR1_L
+   \   00000E                REQUIRE _A_TB3CCR2_L
+     43          //reverse motos on
+
+   \                                 In  segment CODE, align 2
+     44          void Reverse_Motors_On(void){
+   \                     Reverse_Motors_On:
+     45            RIGHT_REVERSE_SPEED = RIGHT_REVERSE_PWM; 
+   \   000000   B24070175804 MOV.W   #0x1770, &0x458
+     46            LEFT_REVERSE_SPEED = LEFT_REVERSE_PWM;
+   \   000006   B24070175A04 MOV.W   #0x1770, &0x45a
+     47          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_TB3CCR3_L
+   \   00000E                REQUIRE _A_TB3CCR4_L
+     48          //forward motors off
+
+   \                                 In  segment CODE, align 2
+     49          void Forward_Motors_Off(void){
+   \                     Forward_Motors_Off:
+     50            RIGHT_FORWARD_SPEED = WHEEL_OFF;
+   \   000000   82435404     MOV.W   #0x0, &0x454
+     51            LEFT_FORWARD_SPEED = WHEEL_OFF;
+   \   000004   82435604     MOV.W   #0x0, &0x456
+     52          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE _A_TB3CCR1_L
+   \   00000A                REQUIRE _A_TB3CCR2_L
+     53          //reverse movement off
+
+   \                                 In  segment CODE, align 2
+     54          void Reverse_Motors_Off(void){
+   \                     Reverse_Motors_Off:
+     55            RIGHT_REVERSE_SPEED = WHEEL_OFF; 
+   \   000000   82435804     MOV.W   #0x0, &0x458
+     56            LEFT_REVERSE_SPEED = WHEEL_OFF;
+   \   000004   82435A04     MOV.W   #0x0, &0x45a
+     57          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE _A_TB3CCR3_L
+   \   00000A                REQUIRE _A_TB3CCR4_L
+     58          //right forward movement
+
+   \                                 In  segment CODE, align 2
+     59          void Forward_Right_Motor_On(void){
+   \                     Forward_Right_Motor_On:
+     60            RIGHT_FORWARD_SPEED = RIGHT_FORWARD_PWM;
+   \   000000   B2401A275404 MOV.W   #0x271a, &0x454
+     61          }
+   \   000006   1001         RETA
+   \   000008                REQUIRE _A_TB3CCR1_L
+     62          //turn right movement off
+
+   \                                 In  segment CODE, align 2
+     63          void Forward_Right_motor_Off(void){
+   \                     Forward_Right_motor_Off:
+     64            RIGHT_FORWARD_SPEED = WHEEL_OFF;
+   \   000000   82435404     MOV.W   #0x0, &0x454
+     65          }
+   \   000004   1001         RETA
+   \   000006                REQUIRE _A_TB3CCR1_L
+     66          //turn left movement on
+
+   \                                 In  segment CODE, align 2
+     67          void Forward_Left_Motor_On(void){
+   \                     Forward_Left_Motor_On:
+     68            LEFT_FORWARD_SPEED = LEFT_FORWARD_PWM;
+   \   000000   B24010275604 MOV.W   #0x2710, &0x456
+     69          }
+   \   000006   1001         RETA
+   \   000008                REQUIRE _A_TB3CCR2_L
+     70          //left movement off only
+
+   \                                 In  segment CODE, align 2
+     71          void Forward_Left_Motor_Off(void){
+   \                     Forward_Left_Motor_Off:
+     72            LEFT_FORWARD_SPEED = WHEEL_OFF;
+   \   000000   82435604     MOV.W   #0x0, &0x456
+     73          }
+   \   000004   1001         RETA
+   \   000006                REQUIRE _A_TB3CCR2_L
+     74          //right reverse movement
+
+   \                                 In  segment CODE, align 2
+     75          void Reverse_Right_Motor_On(void){
+   \                     Reverse_Right_Motor_On:
+     76            RIGHT_REVERSE_SPEED = RIGHT_REVERSE_PWM;
+   \   000000   B24070175804 MOV.W   #0x1770, &0x458
+     77          }
+   \   000006   1001         RETA
+   \   000008                REQUIRE _A_TB3CCR3_L
+     78          //turn right reverse movement off
+
+   \                                 In  segment CODE, align 2
+     79          void Reverse_Right_motor_Off(void){
+   \                     Reverse_Right_motor_Off:
+     80            RIGHT_REVERSE_SPEED = WHEEL_OFF;
+   \   000000   82435804     MOV.W   #0x0, &0x458
+     81          }
+   \   000004   1001         RETA
+   \   000006                REQUIRE _A_TB3CCR3_L
+     82          //turn left reverse movement on
+
+   \                                 In  segment CODE, align 2
+     83          void Reverse_Left_Motor_On(void){
+   \                     Reverse_Left_Motor_On:
+     84            LEFT_REVERSE_SPEED = LEFT_REVERSE_PWM;
+   \   000000   B24070175A04 MOV.W   #0x1770, &0x45a
+     85          }
+   \   000006   1001         RETA
+   \   000008                REQUIRE _A_TB3CCR4_L
+     86          //left reverse movement off only
+
+   \                                 In  segment CODE, align 2
+     87          void Reverse_Left_Motor_Off(void){
+   \                     Reverse_Left_Motor_Off:
+     88            LEFT_REVERSE_SPEED = WHEEL_OFF;
+   \   000000   82435A04     MOV.W   #0x0, &0x45a
+     89          }
+   \   000004   1001         RETA
+   \   000006                REQUIRE _A_TB3CCR4_L
+     90          
+
+   \                                 In  segment CODE, align 2
+     91          void wheel_Safety_Check(void){
+   \                     wheel_Safety_Check:
+   \   000000   1B15         PUSHM.W #0x2, R11
+     92            //wheel safety check
+     93          
+     94            unsigned int temp_right_forward;
+     95            unsigned int temp_left_forward;
+     96          
+     97            temp_right_forward = RIGHT_FORWARD_SPEED;
+   \   000002   1A425404     MOV.W   &0x454, R10
+     98            temp_left_forward = LEFT_FORWARD_SPEED;
+   \   000006   1B425604     MOV.W   &0x456, R11
+     99          
+    100            if(temp_right_forward & RIGHT_REVERSE_SPEED){
+   \   00000A   1AB25804     BIT.W   &0x458, R10
+   \   00000E   0624         JEQ     ??wheel_Safety_Check_0
+    101              RIGHT_FORWARD_SPEED = WHEEL_OFF;
+   \   000010   82435404     MOV.W   #0x0, &0x454
+    102              RIGHT_REVERSE_SPEED = WHEEL_OFF;
+   \   000014   82435804     MOV.W   #0x0, &0x458
+    103              Red_LED_On();
+   \   000018   ........     CALLA   #Red_LED_On
+    104          
+    105            }
+    106            if(temp_left_forward & LEFT_REVERSE_SPEED){
+   \                     ??wheel_Safety_Check_0:
+   \   00001C   1BB25A04     BIT.W   &0x45a, R11
+   \   000020   0624         JEQ     ??wheel_Safety_Check_1
+    107              LEFT_FORWARD_SPEED = WHEEL_OFF;
+   \   000022   82435604     MOV.W   #0x0, &0x456
+    108              LEFT_REVERSE_SPEED = WHEEL_OFF;
+   \   000026   82435A04     MOV.W   #0x0, &0x45a
+    109              Red_LED_On();
+   \   00002A   ........     CALLA   #Red_LED_On
+    110            }
+    111          }
+   \                     ??wheel_Safety_Check_1:
+   \   00002E   1A17         POPM.W  #0x2, R11
+   \   000030   1001         RETA
+   \   000032                REQUIRE _A_TB3CCR1_L
+   \   000032                REQUIRE _A_TB3CCR2_L
+   \   000032                REQUIRE _A_TB3CCR3_L
+   \   000032                REQUIRE _A_TB3CCR4_L
+    112          
+
+   \                                 In  segment CODE, align 2
+    113          void black_line_found(void){
+   \                     black_line_found:
+    114            if((ADC_movement()==1)&&(start_wheels>=2)){
+   \   000000   ........     CALLA   #ADC_movement
+   \   000004   1C93         CMP.W   #0x1, R12
+   \   000006   1420         JNE     ??black_line_found_0
+   \   000008   E293....     CMP.B   #0x2, &start_wheels
+   \   00000C   1128         JNC     ??black_line_found_0
+    115              Motors_Off();
+   \   00000E   ........     CALLA   #Motors_Off
+    116              start_wheels = RESET_STATE;
+   \   000012   C243....     MOV.B   #0x0, &start_wheels
+    117              
+    118              
+    119              TB1CCTL2 &= ~CCIFG;             //clear possible pending interrupt
+   \   000016   92C3C603     BIC.W   #0x1, &0x3c6
+    120              TB1CCR2 = TB1R + TB1CCR2_INTERVAL;   //CCR2
+   \   00001A   1F42D003     MOV.W   &0x3d0, R15
+   \   00001E   3F5024F4     ADD.W   #0xf424, R15
+   \   000022   824FD603     MOV.W   R15, &0x3d6
+    121              TB1CCTL2 |= CCIE;             //CCR2 enable interrupt
+   \   000026   B2D01000C603 BIS.W   #0x10, &0x3c6
+    122              t1ccr2_counter = RESET_STATE;
+   \   00002C   8243....     MOV.W   #0x0, &t1ccr2_counter
+    123            }
+    124          }
+   \                     ??black_line_found_0:
+   \   000030   1001         RETA
+   \   000032                REQUIRE _A_TB1CCTL2_L
+   \   000032                REQUIRE _A_TB1CCR2_L
+   \   000032                REQUIRE _A_TB1R_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Forward_Left_Motor_Off
+      4   Forward_Left_Motor_On
+      4   Forward_Motors_Off
+      4   Forward_Motors_On
+      4   Forward_Right_Motor_On
+      4   Forward_Right_motor_Off
+      4   Init_Motors
+      4   Motors_Off
+      4   Reverse_Left_Motor_Off
+      4   Reverse_Left_Motor_On
+      4   Reverse_Motors_Off
+      4   Reverse_Motors_On
+      4   Reverse_Right_Motor_On
+      4   Reverse_Right_motor_Off
+      4   black_line_found
+        4   -> ADC_movement
+        4   -> Motors_Off
+      8   wheel_Safety_Check
+        8   -> Red_LED_On
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       6  Forward_Left_Motor_Off
+       8  Forward_Left_Motor_On
+      10  Forward_Motors_Off
+      14  Forward_Motors_On
+       8  Forward_Right_Motor_On
+       6  Forward_Right_motor_Off
+      18  Init_Motors
+      18  Motors_Off
+       6  Reverse_Left_Motor_Off
+       8  Reverse_Left_Motor_On
+      10  Reverse_Motors_Off
+      14  Reverse_Motors_On
+       8  Reverse_Right_Motor_On
+       6  Reverse_Right_motor_Off
+       2  _A_TB1CCR2_L
+       2  _A_TB1CCTL2_L
+       2  _A_TB1R_L
+       2  _A_TB3CCR1_L
+       2  _A_TB3CCR2_L
+       2  _A_TB3CCR3_L
+       2  _A_TB3CCR4_L
+      50  black_line_found
+      50  wheel_Safety_Check
+
+ 
+ 240 bytes in segment CODE
+  14 bytes in segment DATA16_AN
+ 
+ 240 bytes of CODE memory
+   0 bytes of DATA memory (+ 14 bytes shared)
+
+Errors: none
+Warnings: none

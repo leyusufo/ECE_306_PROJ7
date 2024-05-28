@@ -1,0 +1,182 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.20.1.997/W32 for MSP430           23/Apr/2021  20:27:56
+# Copyright 1996-2020 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.20
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\conversions.c
+#    Command line  =  
+#        -f C:\Users\loyda\AppData\Local\Temp\EW16B2.tmp
+#        ("C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\conversions.c" -lC
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List" -o
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj" --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --debug -D__MSP430FR2355__ -e --double=32
+#        --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.4\430\lib\dlib\dl430xlsfn.h" -I ./ --core=430X --data_model=small
+#        -On --multiplier=32 --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List\conversions.lst
+#    Object file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj\conversions.r43
+#
+###############################################################################
+
+C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306 CODE\Project_07\conversions.c
+      1          #include  "functions.h"
+      2          #include  "macros.h"
+      3          //#include  "msp430.h"
+      4          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      5          char thousands=RESET_STATE;
+   \                     thousands:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      6          char hundreds=RESET_STATE;
+   \                     hundreds:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      7          char tens=RESET_STATE;
+   \                     tens:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      8          char ones=RESET_STATE;
+   \                     ones:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      9          char BDC_value[4]={RESET_STATE,RESET_STATE,RESET_STATE,RESET_STATE};
+   \                     BDC_value:
+   \   000000                DS8 4
+     10          
+
+   \                                 In  segment CODE, align 2
+     11          void HEXtoBCD(unsigned int value){
+   \                     HEXtoBCD:
+     12            thousands = RESET_STATE;
+   \   000000   C243....     MOV.B   #0x0, &thousands
+     13            hundreds = RESET_STATE;
+   \   000004   C243....     MOV.B   #0x0, &hundreds
+     14            tens = RESET_STATE;
+   \   000008   C243....     MOV.B   #0x0, &tens
+     15            ones = RESET_STATE;
+   \   00000C   C243....     MOV.B   #0x0, &ones
+     16            
+     17            while(value > RESET_STATE){
+   \                     ??HEXtoBCD_0:
+   \   000010   0C93         CMP.W   #0x0, R12
+   \   000012   1E24         JEQ     ??HEXtoBCD_1
+     18              if(value >= THOUSANDS){
+   \   000014   3C90E803     CMP.W   #0x3e8, R12
+   \   000018   0528         JNC     ??HEXtoBCD_2
+     19                value = value - THOUSANDS;
+   \   00001A   3C5018FC     ADD.W   #0xfc18, R12
+     20                thousands = thousands + 1;
+   \   00001E   D253....     ADD.B   #0x1, &thousands
+   \   000022   F63F         JMP     ??HEXtoBCD_0
+     21              }
+     22              else if(value >=HUNDREDS){
+   \                     ??HEXtoBCD_2:
+   \   000024   3C906400     CMP.W   #0x64, R12
+   \   000028   0528         JNC     ??HEXtoBCD_3
+     23                value = value - HUNDREDS;
+   \   00002A   3C509CFF     ADD.W   #0xff9c, R12
+     24                hundreds = hundreds + 1;
+   \   00002E   D253....     ADD.B   #0x1, &hundreds
+   \   000032   EE3F         JMP     ??HEXtoBCD_0
+     25              }
+     26              else if(value >=TENS){
+   \                     ??HEXtoBCD_3:
+   \   000034   3C900A00     CMP.W   #0xa, R12
+   \   000038   0528         JNC     ??HEXtoBCD_4
+     27                value = value - TENS;
+   \   00003A   3C50F6FF     ADD.W   #0xfff6, R12
+     28                tens = tens + 1;
+   \   00003E   D253....     ADD.B   #0x1, &tens
+   \   000042   E63F         JMP     ??HEXtoBCD_0
+     29              }
+     30              else if(value >= 1){
+   \                     ??HEXtoBCD_4:
+   \   000044   0C93         CMP.W   #0x0, R12
+   \   000046   E427         JEQ     ??HEXtoBCD_0
+     31                value = value - 1;
+   \   000048   3C53         ADD.W   #0xffff, R12
+     32                ones = ones + 1;
+   \   00004A   D253....     ADD.B   #0x1, &ones
+   \   00004E   E03F         JMP     ??HEXtoBCD_0
+     33              }
+     34              else{;}
+     35            }
+     36            
+     37            thousands = thousands + ZERO_ASCII;
+   \                     ??HEXtoBCD_1:
+   \   000050   F2503000.... ADD.B   #0x30, &thousands
+     38            hundreds = hundreds + ZERO_ASCII;
+   \   000056   F2503000.... ADD.B   #0x30, &hundreds
+     39            tens = tens + ZERO_ASCII;
+   \   00005C   F2503000.... ADD.B   #0x30, &tens
+     40            ones = ones + ZERO_ASCII;
+   \   000062   F2503000.... ADD.B   #0x30, &ones
+     41            
+     42            BDC_value[0] = thousands;
+   \   000068   D242........ MOV.B   &thousands, &BDC_value
+     43            BDC_value[1] = hundreds;
+   \   00006E   D242........ MOV.B   &hundreds, &BDC_value + 1
+     44            BDC_value[2] = tens;
+   \   000074   D242........ MOV.B   &tens, &BDC_value + 2
+     45            BDC_value[3] = ones;
+   \   00007A   D242........ MOV.B   &ones, &BDC_value + 3
+     46          }
+   \   000080   1001         RETA
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   HEXtoBCD
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  BDC_value
+     130  HEXtoBCD
+       1  hundreds
+       1  ones
+       1  tens
+       1  thousands
+
+ 
+ 130 bytes in segment CODE
+   8 bytes in segment DATA16_Z
+ 
+ 130 bytes of CODE memory
+   8 bytes of DATA memory
+
+Errors: none
+Warnings: none

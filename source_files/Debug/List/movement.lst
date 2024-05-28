@@ -1,0 +1,821 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.20.1.997/W32 for MSP430           02/Mar/2021  16:45:21
+# Copyright 1996-2020 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.20
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\movement.c
+#    Command line  =  
+#        -f C:\Users\loyda\AppData\Local\Temp\EW8D01.tmp
+#        ("C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\movement.c" -lC
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\Debug\List" -o
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\Debug\Obj" --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --debug -D__MSP430FR2355__ -e --double=32
+#        --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.4\430\lib\dlib\dl430xlsfn.h" -I ./ --core=430X --data_model=small
+#        -On --multiplier=32 --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\Debug\List\movement.lst
+#    Object file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\Debug\Obj\movement.r43
+#
+###############################################################################
+
+C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306 CODE\Project_05\movement.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the Main Routine - "While" Operating System
+      4          //
+      5          //
+      6          //  Jim Carlson
+      7          //  Jan 2018
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "functions.h"
+     13          #include  "macros.h"
+     14          #include  "msp430.h"
+     15          #include <string.h>
+     16          #include "ports.h"
+     17          
+     18          //variables
+     19          extern unsigned int cycle_time; // is a new time base used to control making shapes
+     20          extern unsigned int time_change; // is an identifier that a change has occurred
+     21          extern char state;
+     22          extern unsigned int delay_start;
+     23          extern unsigned int right_motor_count;
+     24          extern unsigned int left_motor_count;
+     25          extern unsigned int segment_count;
+     26          extern char event;
+     27          extern char sub_state;
+     28          extern unsigned int iterator;
+     29          extern unsigned int iterator_trig;
+     30          
+     31          //Here is the State Machine for circular movement
+
+   \                                 In  segment CODE, align 2
+     32          void Run_Circle(void){
+   \                     Run_Circle:
+     33            switch(state){
+   \   000000   5E42....     MOV.B   &state, R14
+   \   000004   7E804500     SUB.B   #0x45, R14
+   \   000008   1024         JEQ     ??Run_Circle_2
+   \   00000A   7E800D00     SUB.B   #0xd, R14
+   \   00000E   0A24         JEQ     ??Run_Circle_3
+   \   000010   5E83         SUB.B   #0x1, R14
+   \   000012   0524         JEQ     ??Run_Circle_4
+   \   000014   6E82         SUB.B   #0x4, R14
+   \   000016   0B20         JNE     ??Run_Circle_0
+     34            case WAIT: // Begin
+     35              wait_case();
+   \   000018   ........     CALLA   #wait_case
+     36              break; //
+   \   00001C   1001         RETA
+     37            case START: // Begin
+     38              start_case();
+   \                     ??Run_Circle_4:
+   \   00001E   ........     CALLA   #start_case
+     39              break; //
+   \   000022   1001         RETA
+     40            case RUN: // Run
+     41              run_case_circle();
+   \                     ??Run_Circle_3:
+   \   000024   ........     CALLA   #run_case_circle
+     42              break; //
+   \   000028   1001         RETA
+     43            case END: // End
+     44              end_case();
+   \                     ??Run_Circle_2:
+   \   00002A   ........     CALLA   #end_case
+     45              break; //
+     46            default: break;
+     47            }
+     48          }
+   \                     ??Run_Circle_0:
+   \   00002E   1001         RETA
+     49          
+     50          //Here is the State Machine for figure 8 movement
+
+   \                                 In  segment CODE, align 2
+     51          void Run_Figure8(void){
+   \                     Run_Figure8:
+     52            switch(state){
+   \   000000   5E42....     MOV.B   &state, R14
+   \   000004   7E804500     SUB.B   #0x45, R14
+   \   000008   1B24         JEQ     ??Run_Figure8_3
+   \   00000A   7E800D00     SUB.B   #0xd, R14
+   \   00000E   0A24         JEQ     ??Run_Figure8_4
+   \   000010   5E83         SUB.B   #0x1, R14
+   \   000012   0524         JEQ     ??Run_Figure8_5
+   \   000014   6E82         SUB.B   #0x4, R14
+   \   000016   1620         JNE     ??Run_Figure8_1
+     53            case WAIT:// Begin
+     54              wait_case();
+   \   000018   ........     CALLA   #wait_case
+     55              break; //
+   \   00001C   1001         RETA
+     56            case START: // Begin
+     57              start_case();
+   \                     ??Run_Figure8_5:
+   \   00001E   ........     CALLA   #start_case
+     58              break; //
+   \   000022   1001         RETA
+     59            case RUN: // Run
+     60              switch(sub_state){
+   \                     ??Run_Figure8_4:
+   \   000024   5E42....     MOV.B   &sub_state, R14
+   \   000028   7E804100     SUB.B   #0x41, R14
+   \   00002C   0324         JEQ     ??Run_Figure8_6
+   \   00002E   5E83         SUB.B   #0x1, R14
+   \   000030   0424         JEQ     ??Run_Figure8_7
+   \   000032   1001         RETA
+     61              case RUN_1:
+     62                run_case_half_circle_1();
+   \                     ??Run_Figure8_6:
+   \   000034   ........     CALLA   #run_case_half_circle_1
+     63                break;
+   \   000038   1001         RETA
+     64              case RUN_2:
+     65                run_case_half_circle_2();
+   \                     ??Run_Figure8_7:
+   \   00003A   ........     CALLA   #run_case_half_circle_2
+     66                break;
+     67              default:break;
+     68              }
+     69              break;
+   \   00003E   1001         RETA
+     70            case END: // End
+     71              end_case();
+   \                     ??Run_Figure8_3:
+   \   000040   ........     CALLA   #end_case
+     72              break;
+     73            default: break;
+     74            }
+     75          }
+   \                     ??Run_Figure8_1:
+   \   000044   1001         RETA
+     76          
+
+   \                                 In  segment CODE, align 2
+     77          void Run_Triangle(void){
+   \                     Run_Triangle:
+     78            switch(state){
+   \   000000   5E42....     MOV.B   &state, R14
+   \   000004   7E804500     SUB.B   #0x45, R14
+   \   000008   1B24         JEQ     ??Run_Triangle_3
+   \   00000A   7E800D00     SUB.B   #0xd, R14
+   \   00000E   0A24         JEQ     ??Run_Triangle_4
+   \   000010   5E83         SUB.B   #0x1, R14
+   \   000012   0524         JEQ     ??Run_Triangle_5
+   \   000014   6E82         SUB.B   #0x4, R14
+   \   000016   1620         JNE     ??Run_Triangle_1
+     79            case WAIT:// Begin
+     80              wait_case();
+   \   000018   ........     CALLA   #wait_case
+     81              break; //
+   \   00001C   1001         RETA
+     82            case START: // Begin
+     83              start_case();
+   \                     ??Run_Triangle_5:
+   \   00001E   ........     CALLA   #start_case
+     84              break; //
+   \   000022   1001         RETA
+     85            case RUN: // Run
+     86              switch(sub_state){
+   \                     ??Run_Triangle_4:
+   \   000024   5E42....     MOV.B   &sub_state, R14
+   \   000028   7E804100     SUB.B   #0x41, R14
+   \   00002C   0324         JEQ     ??Run_Triangle_6
+   \   00002E   5E83         SUB.B   #0x1, R14
+   \   000030   0424         JEQ     ??Run_Triangle_7
+   \   000032   1001         RETA
+     87              case RUN_1:
+     88                run_case_straight();
+   \                     ??Run_Triangle_6:
+   \   000034   ........     CALLA   #run_case_straight
+     89                break;
+   \   000038   1001         RETA
+     90              case RUN_2:
+     91                run_case_circle_270();
+   \                     ??Run_Triangle_7:
+   \   00003A   ........     CALLA   #run_case_circle_270
+     92                break;
+     93              default:break;
+     94              }
+     95              break;
+   \   00003E   1001         RETA
+     96            case END: // End
+     97              end_case();
+   \                     ??Run_Triangle_3:
+   \   000040   ........     CALLA   #end_case
+     98              break;
+     99            default: break;
+    100            }
+    101          }
+   \                     ??Run_Triangle_1:
+   \   000044   1001         RETA
+    102          
+    103          //The first state “WAIT” allows for the button to be pressed and time to move out of the way.
+
+   \                                 In  segment CODE, align 2
+    104          void wait_case(void){
+   \                     wait_case:
+    105            if(time_change){
+   \   000000   8293....     CMP.W   #0x0, &time_change
+   \   000004   1024         JEQ     ??wait_case_0
+    106              time_change = 0;
+   \   000006   8243....     MOV.W   #0x0, &time_change
+    107              if(delay_start++ >= WAITING2START){
+   \   00000A   1F42....     MOV.W   &delay_start, R15
+   \   00000E   0E4F         MOV.W   R15, R14
+   \   000010   1E53         ADD.W   #0x1, R14
+   \   000012   824E....     MOV.W   R14, &delay_start
+   \   000016   3F903200     CMP.W   #0x32, R15
+   \   00001A   0528         JNC     ??wait_case_0
+    108                delay_start = 0;
+   \   00001C   8243....     MOV.W   #0x0, &delay_start
+    109                state = START;
+   \   000020   F2405300.... MOV.B   #0x53, &state
+    110              }
+    111            }
+    112          }
+   \                     ??wait_case_0:
+   \   000026   1001         RETA
+    113          
+    114          //The second state “START” sets the initial condition.
+
+   \                                 In  segment CODE, align 2
+    115          void start_case(void){
+   \                     start_case:
+    116            cycle_time = 0;
+   \   000000   8243....     MOV.W   #0x0, &cycle_time
+    117            right_motor_count = 0;
+   \   000004   8243....     MOV.W   #0x0, &right_motor_count
+    118            left_motor_count = 0;
+   \   000008   8243....     MOV.W   #0x0, &left_motor_count
+    119            
+    120            segment_count = 0;
+   \   00000C   8243....     MOV.W   #0x0, &segment_count
+    121            state = RUN;
+   \   000010   F2405200.... MOV.B   #0x52, &state
+    122            
+    123            if(event == CIRCLE){
+   \   000016   F2904300.... CMP.B   #0x43, &event
+   \   00001C   0220         JNE     ??start_case_0
+    124              Forward_Motors_Off();
+   \   00001E   ........     CALLA   #Forward_Motors_Off
+    125            }
+    126            if(event == FIGURE8){
+   \                     ??start_case_0:
+   \   000022   F2904600.... CMP.B   #0x46, &event
+   \   000028   0520         JNE     ??start_case_1
+    127              sub_state = RUN_1;
+   \   00002A   F2404100.... MOV.B   #0x41, &sub_state
+    128              Forward_Motors_Off();
+   \   000030   ........     CALLA   #Forward_Motors_Off
+    129            }
+    130            if(event == TRIANGLE){
+   \                     ??start_case_1:
+   \   000034   F2905400.... CMP.B   #0x54, &event
+   \   00003A   0520         JNE     ??start_case_2
+    131              sub_state = RUN_1;
+   \   00003C   F2404100.... MOV.B   #0x41, &sub_state
+    132              Forward_Motors_On();
+   \   000042   ........     CALLA   #Forward_Motors_On
+    133            }
+    134          }
+   \                     ??start_case_2:
+   \   000046   1001         RETA
+    135          
+    136          //run case for Circle
+
+   \                                 In  segment CODE, align 2
+    137          void run_case_circle(void){
+   \                     run_case_circle:
+    138            if(time_change){
+   \   000000   8293....     CMP.W   #0x0, &time_change
+   \   000004   3024         JEQ     ??run_case_circle_0
+    139              time_change = RESET_STATE;
+   \   000006   8243....     MOV.W   #0x0, &time_change
+    140              if(segment_count <= TRAVEL_DISTANCE_CIRCLE){
+   \   00000A   B2902900.... CMP.W   #0x29, &segment_count
+   \   000010   272C         JC      ??run_case_circle_1
+    141                if(right_motor_count++ >= 40){
+   \   000012   1F42....     MOV.W   &right_motor_count, R15
+   \   000016   0E4F         MOV.W   R15, R14
+   \   000018   1E53         ADD.W   #0x1, R14
+   \   00001A   824E....     MOV.W   R14, &right_motor_count
+   \   00001E   3F902800     CMP.W   #0x28, R15
+   \   000022   0228         JNC     ??run_case_circle_2
+    142                  Forward_Right_Motor_On();
+   \   000024   ........     CALLA   #Forward_Right_Motor_On
+    143                }
+    144                if(left_motor_count++ >= 48){
+   \                     ??run_case_circle_2:
+   \   000028   1F42....     MOV.W   &left_motor_count, R15
+   \   00002C   0E4F         MOV.W   R15, R14
+   \   00002E   1E53         ADD.W   #0x1, R14
+   \   000030   824E....     MOV.W   R14, &left_motor_count
+   \   000034   3F903000     CMP.W   #0x30, R15
+   \   000038   0228         JNC     ??run_case_circle_3
+    145                  Forward_Left_Motor_Off();
+   \   00003A   ........     CALLA   #Forward_Left_Motor_Off
+    146                }
+    147                if(cycle_time >= WHEEL_COUNT_TIME){
+   \                     ??run_case_circle_3:
+   \   00003E   B2903200.... CMP.W   #0x32, &cycle_time
+   \   000044   1028         JNC     ??run_case_circle_0
+    148                  cycle_time = RESET_STATE;
+   \   000046   8243....     MOV.W   #0x0, &cycle_time
+    149                  right_motor_count = RESET_STATE;
+   \   00004A   8243....     MOV.W   #0x0, &right_motor_count
+    150                  left_motor_count = RESET_STATE;
+   \   00004E   8243....     MOV.W   #0x0, &left_motor_count
+    151                  segment_count++;
+   \   000052   9253....     ADD.W   #0x1, &segment_count
+    152                  
+    153                  Forward_Right_Motor_Off();
+                         ^
+Warning[Pe223]: function "Forward_Right_Motor_Off" declared implicitly
+   \   000056   ........     CALLA   #Forward_Right_Motor_Off
+    154                  Forward_Left_Motor_On();
+   \   00005A   ........     CALLA   #Forward_Left_Motor_On
+   \   00005E   1001         RETA
+    155                }
+    156              }        
+    157              else{
+    158                state = END;
+   \                     ??run_case_circle_1:
+   \   000060   F2404500.... MOV.B   #0x45, &state
+    159              }
+    160            }
+    161          }
+   \                     ??run_case_circle_0:
+   \   000066   1001         RETA
+    162          
+    163          //The third state “RUN” controls the movement.
+    164          //[This is the only case that needs to have a different version
+    165          //for each different shape. Arch, Circle, etc.]
+
+   \                                 In  segment CODE, align 2
+    166          void run_case_half_circle_1(void){
+   \                     run_case_half_circle_1:
+    167            if(time_change){
+   \   000000   8293....     CMP.W   #0x0, &time_change
+   \   000004   3A24         JEQ     ??run_case_half_circle_1_0
+    168              time_change = 0;
+   \   000006   8243....     MOV.W   #0x0, &time_change
+    169              if(segment_count <= 8){
+   \   00000A   B2900900.... CMP.W   #0x9, &segment_count
+   \   000010   272C         JC      ??run_case_half_circle_1_1
+    170                if(right_motor_count++ >= 58){
+   \   000012   1F42....     MOV.W   &right_motor_count, R15
+   \   000016   0E4F         MOV.W   R15, R14
+   \   000018   1E53         ADD.W   #0x1, R14
+   \   00001A   824E....     MOV.W   R14, &right_motor_count
+   \   00001E   3F903A00     CMP.W   #0x3a, R15
+   \   000022   0228         JNC     ??run_case_half_circle_1_2
+    171                  Forward_Right_Motor_Off();
+                         ^
+Warning[Pe223]: function "Forward_Right_Motor_Off" declared implicitly
+   \   000024   ........     CALLA   #Forward_Right_Motor_Off
+    172                }
+    173                if(left_motor_count++ >= 55){
+   \                     ??run_case_half_circle_1_2:
+   \   000028   1F42....     MOV.W   &left_motor_count, R15
+   \   00002C   0E4F         MOV.W   R15, R14
+   \   00002E   1E53         ADD.W   #0x1, R14
+   \   000030   824E....     MOV.W   R14, &left_motor_count
+   \   000034   3F903700     CMP.W   #0x37, R15
+   \   000038   0228         JNC     ??run_case_half_circle_1_3
+    174                  Forward_Left_Motor_On();
+   \   00003A   ........     CALLA   #Forward_Left_Motor_On
+    175                }
+    176                if(cycle_time >= 60){
+   \                     ??run_case_half_circle_1_3:
+   \   00003E   B2903C00.... CMP.W   #0x3c, &cycle_time
+   \   000044   1A28         JNC     ??run_case_half_circle_1_0
+    177                  cycle_time = 0;
+   \   000046   8243....     MOV.W   #0x0, &cycle_time
+    178                  right_motor_count = 0;
+   \   00004A   8243....     MOV.W   #0x0, &right_motor_count
+    179                  left_motor_count = 0;
+   \   00004E   8243....     MOV.W   #0x0, &left_motor_count
+    180                  segment_count++;
+   \   000052   9253....     ADD.W   #0x1, &segment_count
+    181                  Forward_Right_Motor_On();
+   \   000056   ........     CALLA   #Forward_Right_Motor_On
+    182                  Forward_Left_Motor_Off();
+   \   00005A   ........     CALLA   #Forward_Left_Motor_Off
+   \   00005E   1001         RETA
+    183                }
+    184              }        
+    185              else{
+    186                cycle_time = 0;
+   \                     ??run_case_half_circle_1_1:
+   \   000060   8243....     MOV.W   #0x0, &cycle_time
+    187                right_motor_count = 0;
+   \   000064   8243....     MOV.W   #0x0, &right_motor_count
+    188                left_motor_count = 0;
+   \   000068   8243....     MOV.W   #0x0, &left_motor_count
+    189                //Forward_Motors_On();
+    190                segment_count = 0;
+   \   00006C   8243....     MOV.W   #0x0, &segment_count
+    191                sub_state = RUN_2;
+   \   000070   F2404200.... MOV.B   #0x42, &sub_state
+    192                
+    193                time_change = 1;
+   \   000076   9243....     MOV.W   #0x1, &time_change
+    194              }
+    195            }
+    196          }
+   \                     ??run_case_half_circle_1_0:
+   \   00007A   1001         RETA
+    197          
+
+   \                                 In  segment CODE, align 2
+    198          void run_case_half_circle_2(void){
+   \                     run_case_half_circle_2:
+    199            if(time_change){
+   \   000000   8293....     CMP.W   #0x0, &time_change
+   \   000004   4824         JEQ     ??run_case_half_circle_2_0
+    200              time_change = RESET_STATE;
+   \   000006   8243....     MOV.W   #0x0, &time_change
+    201              if(segment_count <= 8){
+   \   00000A   B2900900.... CMP.W   #0x9, &segment_count
+   \   000010   272C         JC      ??run_case_half_circle_2_1
+    202                if(right_motor_count++ >= 55){//off 4/6 of the time
+   \   000012   1F42....     MOV.W   &right_motor_count, R15
+   \   000016   0E4F         MOV.W   R15, R14
+   \   000018   1E53         ADD.W   #0x1, R14
+   \   00001A   824E....     MOV.W   R14, &right_motor_count
+   \   00001E   3F903700     CMP.W   #0x37, R15
+   \   000022   0228         JNC     ??run_case_half_circle_2_2
+    203                  Forward_Right_Motor_On();
+   \   000024   ........     CALLA   #Forward_Right_Motor_On
+    204                }
+    205                if(left_motor_count++ >= 58){//on 5/6 of the time
+   \                     ??run_case_half_circle_2_2:
+   \   000028   1F42....     MOV.W   &left_motor_count, R15
+   \   00002C   0E4F         MOV.W   R15, R14
+   \   00002E   1E53         ADD.W   #0x1, R14
+   \   000030   824E....     MOV.W   R14, &left_motor_count
+   \   000034   3F903A00     CMP.W   #0x3a, R15
+   \   000038   0228         JNC     ??run_case_half_circle_2_3
+    206                  Forward_Left_Motor_Off();
+   \   00003A   ........     CALLA   #Forward_Left_Motor_Off
+    207                }
+    208                if(cycle_time >= 60){
+   \                     ??run_case_half_circle_2_3:
+   \   00003E   B2903C00.... CMP.W   #0x3c, &cycle_time
+   \   000044   2828         JNC     ??run_case_half_circle_2_0
+    209                  cycle_time = 0;
+   \   000046   8243....     MOV.W   #0x0, &cycle_time
+    210                  right_motor_count = 0;
+   \   00004A   8243....     MOV.W   #0x0, &right_motor_count
+    211                  left_motor_count = 0;
+   \   00004E   8243....     MOV.W   #0x0, &left_motor_count
+    212                  segment_count++;
+   \   000052   9253....     ADD.W   #0x1, &segment_count
+    213                  Forward_Right_Motor_Off();
+                         ^
+Warning[Pe223]: function "Forward_Right_Motor_Off" declared implicitly
+   \   000056   ........     CALLA   #Forward_Right_Motor_Off
+    214                  Forward_Left_Motor_On();
+   \   00005A   ........     CALLA   #Forward_Left_Motor_On
+   \   00005E   1001         RETA
+    215                }
+    216              }         
+    217              else{
+    218                iterator = iterator + 1;
+   \                     ??run_case_half_circle_2_1:
+   \   000060   9253....     ADD.W   #0x1, &iterator
+    219                if(iterator <= 1){
+   \   000064   A293....     CMP.W   #0x2, &iterator
+   \   000068   0E2C         JC      ??run_case_half_circle_2_4
+    220                  cycle_time = 0;
+   \   00006A   8243....     MOV.W   #0x0, &cycle_time
+    221                  right_motor_count = 0;
+   \   00006E   8243....     MOV.W   #0x0, &right_motor_count
+    222                  left_motor_count = 0;
+   \   000072   8243....     MOV.W   #0x0, &left_motor_count
+    223                  //Forward_Motors_On();
+    224                  segment_count = 0;
+   \   000076   8243....     MOV.W   #0x0, &segment_count
+    225                  sub_state = RUN_1;   
+   \   00007A   F2404100.... MOV.B   #0x41, &sub_state
+    226                  time_change = 0;
+   \   000080   8243....     MOV.W   #0x0, &time_change
+   \   000084   1001         RETA
+    227                }
+    228                else{
+    229                  sub_state = NONE;
+   \                     ??run_case_half_circle_2_4:
+   \   000086   F2404E00.... MOV.B   #0x4e, &sub_state
+    230                  iterator = RESET_STATE;
+   \   00008C   8243....     MOV.W   #0x0, &iterator
+    231                  state = END;
+   \   000090   F2404500.... MOV.B   #0x45, &state
+    232                }
+    233              }
+    234            }
+    235          }
+   \                     ??run_case_half_circle_2_0:
+   \   000096   1001         RETA
+    236          
+
+   \                                 In  segment CODE, align 2
+    237          void run_case_straight(void){
+   \                     run_case_straight:
+    238            if(time_change){
+   \   000000   8293....     CMP.W   #0x0, &time_change
+   \   000004   5124         JEQ     ??run_case_straight_0
+    239              time_change = RESET_STATE;
+   \   000006   8243....     MOV.W   #0x0, &time_change
+    240              if(segment_count <= 8){
+   \   00000A   B2900900.... CMP.W   #0x9, &segment_count
+   \   000010   272C         JC      ??run_case_straight_1
+    241                if(right_motor_count++ >= 5){
+   \   000012   1F42....     MOV.W   &right_motor_count, R15
+   \   000016   0E4F         MOV.W   R15, R14
+   \   000018   1E53         ADD.W   #0x1, R14
+   \   00001A   824E....     MOV.W   R14, &right_motor_count
+   \   00001E   3F900500     CMP.W   #0x5, R15
+   \   000022   0228         JNC     ??run_case_straight_2
+    242                  Forward_Right_Motor_Off();
+                         ^
+Warning[Pe223]: function "Forward_Right_Motor_Off" declared implicitly
+   \   000024   ........     CALLA   #Forward_Right_Motor_Off
+    243                }
+    244                if(left_motor_count++ >= 5){
+   \                     ??run_case_straight_2:
+   \   000028   1F42....     MOV.W   &left_motor_count, R15
+   \   00002C   0E4F         MOV.W   R15, R14
+   \   00002E   1E53         ADD.W   #0x1, R14
+   \   000030   824E....     MOV.W   R14, &left_motor_count
+   \   000034   3F900500     CMP.W   #0x5, R15
+   \   000038   0228         JNC     ??run_case_straight_3
+    245                  Forward_Left_Motor_Off();
+   \   00003A   ........     CALLA   #Forward_Left_Motor_Off
+    246                }
+    247                if(cycle_time >= 7){
+   \                     ??run_case_straight_3:
+   \   00003E   B2900700.... CMP.W   #0x7, &cycle_time
+   \   000044   3128         JNC     ??run_case_straight_0
+    248                  cycle_time = RESET_STATE;
+   \   000046   8243....     MOV.W   #0x0, &cycle_time
+    249                  right_motor_count = RESET_STATE;
+   \   00004A   8243....     MOV.W   #0x0, &right_motor_count
+    250                  left_motor_count = RESET_STATE;
+   \   00004E   8243....     MOV.W   #0x0, &left_motor_count
+    251                  segment_count++;
+   \   000052   9253....     ADD.W   #0x1, &segment_count
+    252                  
+    253                  Forward_Right_Motor_On();
+   \   000056   ........     CALLA   #Forward_Right_Motor_On
+    254                  Forward_Left_Motor_On();
+   \   00005A   ........     CALLA   #Forward_Left_Motor_On
+   \   00005E   1001         RETA
+    255                }
+    256              }        
+    257              else{
+    258                iterator = iterator + 1;
+   \                     ??run_case_straight_1:
+   \   000060   9253....     ADD.W   #0x1, &iterator
+    259                
+    260                if(iterator <= 1){
+   \   000064   A293....     CMP.W   #0x2, &iterator
+   \   000068   0E2C         JC      ??run_case_straight_4
+    261                  cycle_time = 0;
+   \   00006A   8243....     MOV.W   #0x0, &cycle_time
+    262                  right_motor_count = 0;
+   \   00006E   8243....     MOV.W   #0x0, &right_motor_count
+    263                  left_motor_count = 0;
+   \   000072   8243....     MOV.W   #0x0, &left_motor_count
+    264                  //Forward_Motors_On();
+    265                  segment_count = 0;
+   \   000076   8243....     MOV.W   #0x0, &segment_count
+    266                  time_change = 1;
+   \   00007A   9243....     MOV.W   #0x1, &time_change
+    267                  
+    268                  sub_state = RUN_1;  
+   \   00007E   F2404100.... MOV.B   #0x41, &sub_state
+   \   000084   1001         RETA
+    269                }
+    270                else{
+    271                  iterator = RESET_STATE;
+   \                     ??run_case_straight_4:
+   \   000086   8243....     MOV.W   #0x0, &iterator
+    272                  sub_state = RUN_2;
+   \   00008A   F2404200.... MOV.B   #0x42, &sub_state
+    273                  
+    274                  cycle_time = 0;
+   \   000090   8243....     MOV.W   #0x0, &cycle_time
+    275                  right_motor_count = 0;
+   \   000094   8243....     MOV.W   #0x0, &right_motor_count
+    276                  left_motor_count = 0;
+   \   000098   8243....     MOV.W   #0x0, &left_motor_count
+    277                  Forward_Motors_Off();
+   \   00009C   ........     CALLA   #Forward_Motors_Off
+    278                  segment_count = 0; 
+   \   0000A0   8243....     MOV.W   #0x0, &segment_count
+    279                  time_change = 1;
+   \   0000A4   9243....     MOV.W   #0x1, &time_change
+    280                }
+    281              }
+    282            }
+    283          }
+   \                     ??run_case_straight_0:
+   \   0000A8   1001         RETA
+    284          
+
+   \                                 In  segment CODE, align 2
+    285          void run_case_circle_270(void){
+   \                     run_case_circle_270:
+    286            if(time_change){
+   \   000000   8293....     CMP.W   #0x0, &time_change
+   \   000004   3A24         JEQ     ??run_case_circle_270_0
+    287              time_change = RESET_STATE;
+   \   000006   8243....     MOV.W   #0x0, &time_change
+    288              if(segment_count <= 5){
+   \   00000A   B2900600.... CMP.W   #0x6, &segment_count
+   \   000010   1A2C         JC      ??run_case_circle_270_1
+    289                /* if(right_motor_count++ >= 7){//off
+    290                Forward_Right_Motor_On();
+    291              }*/
+    292                if(left_motor_count++ >= 28){//on
+   \   000012   1F42....     MOV.W   &left_motor_count, R15
+   \   000016   0E4F         MOV.W   R15, R14
+   \   000018   1E53         ADD.W   #0x1, R14
+   \   00001A   824E....     MOV.W   R14, &left_motor_count
+   \   00001E   3F901C00     CMP.W   #0x1c, R15
+   \   000022   0228         JNC     ??run_case_circle_270_2
+    293                  Forward_Left_Motor_Off();
+   \   000024   ........     CALLA   #Forward_Left_Motor_Off
+    294                }
+    295                if(cycle_time >= 30){
+   \                     ??run_case_circle_270_2:
+   \   000028   B2901E00.... CMP.W   #0x1e, &cycle_time
+   \   00002E   2528         JNC     ??run_case_circle_270_0
+    296                  cycle_time = RESET_STATE;
+   \   000030   8243....     MOV.W   #0x0, &cycle_time
+    297                  right_motor_count = RESET_STATE;
+   \   000034   8243....     MOV.W   #0x0, &right_motor_count
+    298                  left_motor_count = RESET_STATE;
+   \   000038   8243....     MOV.W   #0x0, &left_motor_count
+    299                  segment_count++;
+   \   00003C   9253....     ADD.W   #0x1, &segment_count
+    300                  
+    301                  //Forward_Right_Motor_Off();
+    302                  Forward_Left_Motor_On();
+   \   000040   ........     CALLA   #Forward_Left_Motor_On
+   \   000044   1001         RETA
+    303                }
+    304              }        
+    305              else{
+    306                iterator_trig = iterator_trig + 1;
+   \                     ??run_case_circle_270_1:
+   \   000046   9253....     ADD.W   #0x1, &iterator_trig
+    307                
+    308                if(iterator_trig >= 3){
+   \   00004A   B2900300.... CMP.W   #0x3, &iterator_trig
+   \   000050   0928         JNC     ??run_case_circle_270_3
+    309                  iterator_trig = RESET_STATE;
+   \   000052   8243....     MOV.W   #0x0, &iterator_trig
+    310                  sub_state = NONE;
+   \   000056   F2404E00.... MOV.B   #0x4e, &sub_state
+    311                  state = END;
+   \   00005C   F2404500.... MOV.B   #0x45, &state
+   \   000062   1001         RETA
+    312                }
+    313                else{
+    314                  sub_state = RUN_1;
+   \                     ??run_case_circle_270_3:
+   \   000064   F2404100.... MOV.B   #0x41, &sub_state
+    315                  
+    316                  cycle_time = 0;
+   \   00006A   8243....     MOV.W   #0x0, &cycle_time
+    317                  right_motor_count = 0;
+   \   00006E   8243....     MOV.W   #0x0, &right_motor_count
+    318                  left_motor_count = 0;
+   \   000072   8243....     MOV.W   #0x0, &left_motor_count
+    319                  
+    320                  segment_count = 0;
+   \   000076   8243....     MOV.W   #0x0, &segment_count
+    321                }
+    322              }
+    323            }
+    324          }
+   \                     ??run_case_circle_270_0:
+   \   00007A   1001         RETA
+    325          
+    326          //The last state “END” clears the state machine back to NONE so it ends and movement over.
+
+   \                                 In  segment CODE, align 2
+    327          void end_case(void){
+   \                     end_case:
+    328            Forward_Motors_Off();
+   \   000000   ........     CALLA   #Forward_Motors_Off
+    329            state = WAIT;
+   \   000004   F2405700.... MOV.B   #0x57, &state
+    330            sub_state = WAIT;
+   \   00000A   F2405700.... MOV.B   #0x57, &sub_state
+    331            event = NONE;
+   \   000010   F2404E00.... MOV.B   #0x4e, &event
+    332            
+    333          }
+   \   000016   1001         RETA
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Run_Circle
+        4   -> end_case
+        4   -> run_case_circle
+        4   -> start_case
+        4   -> wait_case
+      4   Run_Figure8
+        4   -> end_case
+        4   -> run_case_half_circle_1
+        4   -> run_case_half_circle_2
+        4   -> start_case
+        4   -> wait_case
+      4   Run_Triangle
+        4   -> end_case
+        4   -> run_case_circle_270
+        4   -> run_case_straight
+        4   -> start_case
+        4   -> wait_case
+      4   end_case
+        4   -> Forward_Motors_Off
+      4   run_case_circle
+        4   -> Forward_Left_Motor_Off
+        4   -> Forward_Left_Motor_On
+        4   -> Forward_Right_Motor_Off
+        4   -> Forward_Right_Motor_On
+      4   run_case_circle_270
+        4   -> Forward_Left_Motor_Off
+        4   -> Forward_Left_Motor_On
+      4   run_case_half_circle_1
+        4   -> Forward_Left_Motor_Off
+        4   -> Forward_Left_Motor_On
+        4   -> Forward_Right_Motor_Off
+        4   -> Forward_Right_Motor_On
+      4   run_case_half_circle_2
+        4   -> Forward_Left_Motor_Off
+        4   -> Forward_Left_Motor_On
+        4   -> Forward_Right_Motor_Off
+        4   -> Forward_Right_Motor_On
+      4   run_case_straight
+        4   -> Forward_Left_Motor_Off
+        4   -> Forward_Left_Motor_On
+        4   -> Forward_Motors_Off
+        4   -> Forward_Right_Motor_Off
+        4   -> Forward_Right_Motor_On
+      4   start_case
+        4   -> Forward_Motors_Off
+        4   -> Forward_Motors_On
+      4   wait_case
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      48  Run_Circle
+      70  Run_Figure8
+      70  Run_Triangle
+      24  end_case
+     104  run_case_circle
+     124  run_case_circle_270
+     124  run_case_half_circle_1
+     152  run_case_half_circle_2
+     170  run_case_straight
+      72  start_case
+      40  wait_case
+
+ 
+ 998 bytes in segment CODE
+ 
+ 998 bytes of CODE memory
+
+Errors: none
+Warnings: 4

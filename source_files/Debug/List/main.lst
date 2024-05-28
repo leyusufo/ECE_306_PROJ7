@@ -1,0 +1,178 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.20.1.997/W32 for MSP430           23/Apr/2021  20:27:56
+# Copyright 1996-2020 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.20
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\main.c
+#    Command line  =  
+#        -f C:\Users\loyda\AppData\Local\Temp\EW17E3.tmp
+#        ("C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\main.c" -lC "C:\Users\loyda\OneDrive\Documents\CLASS
+#        FOLDERS\ECE 306\ECE 306 CODE\Project_07\Debug\List" -o
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj" --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --debug -D__MSP430FR2355__ -e --double=32
+#        --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.4\430\lib\dlib\dl430xlsfn.h" -I ./ --core=430X --data_model=small
+#        -On --multiplier=32 --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List\main.lst
+#    Object file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj\main.r43
+#
+###############################################################################
+
+C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306 CODE\Project_07\main.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the Main Routine - "While" Operating System
+      4          //
+      5          //
+      6          //  Loyda Yusufova
+      7          //  2021
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "functions.h"
+     13          #include  "macros.h"
+     14          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x130
+   \   union <unnamed> _A_PM5CTL0_L
+   \                     _A_PM5CTL0_L:
+   \   000000                DS8 2
+     15          #include <string.h>
+     16          #include "ports.h"
+     17          
+     18          // Global Variables
+     19          extern char display_line[4][11];
+     20          extern char *display[4];
+     21          extern unsigned char display_mode;
+     22          extern volatile unsigned char display_changed;
+     23          extern volatile unsigned char update_display;
+     24          
+
+   \                                 In  segment CODE, align 2
+     25          void main(void){
+   \                     main:
+     26            //------------------------------------------------------------------------------
+     27            // Main Program
+     28            // This is the main routine for the program. Execution of code starts here.
+     29            // The operating system is Back Ground Fore Ground.
+     30            //
+     31            //------------------------------------------------------------------------------
+     32            // Disable the GPIO power-on default high-impedance mode to activate
+     33            // previously configured port settings
+     34            //turn the light on your LCD on
+     35            
+     36            PM5CTL0 &= ~LOCKLPM5;
+   \   000000   92C33001     BIC.W   #0x1, &0x130
+     37            Init_Ports();                        // Initialize Ports
+   \   000004   ........     CALLA   #Init_Ports
+     38            Init_Clocks();                       // Initialize Clock System
+   \   000008   ........     CALLA   #Init_Clocks
+     39            Init_Conditions();                   // Initialize Variables and Initial Conditions
+   \   00000C   ........     CALLA   #Init_Conditions
+     40            Init_LCD();                          // Initialize LCD
+   \   000010   ........     CALLA   #Init_LCD
+     41            Init_Timers();                       // Initialize Timers
+   \   000014   ........     CALLA   #Init_Timers
+     42            
+     43            P4OUT |= RESET_LCD;        // Set RESET_LCD On [high]
+   \   000018   D2D32302     BIS.B   #0x1, &0x223
+     44            P6OUT |= LCD_BACKLITE;
+   \   00001C   F2D010004302 BIS.B   #0x10, &0x243
+     45            
+     46            Init_ADC();           //initiate ADC 
+   \   000022   ........     CALLA   #Init_ADC
+     47            Init_REF();           //initiate internal reference for DAC
+   \   000026   ........     CALLA   #Init_REF
+     48            Init_DAC();           //initiate the DAC
+   \   00002A   ........     CALLA   #Init_DAC
+     49            set_DAC_1200();       //sets the DAC to 2000 incrementing decrementing by 100 with timer
+   \   00002E   ........     CALLA   #set_DAC_1200
+     50            
+     51            //------------------------------------------------------------------------------
+     52            // Begining of the "While" Operating System
+     53            //------------------------------------------------------------------------------
+     54            while(ALWAYS) {               // Can the Operating system run
+     55              black_line_found();         //checks if the black line has been found and stops the car
+   \                     ??main_0:
+   \   000032   ........     CALLA   #black_line_found
+     56              new_average_ADC();          //checks if there is a new average of ADC readings
+   \   000036   ........     CALLA   #new_average_ADC
+     57              wheel_Safety_Check();       //checks for wheel safety
+   \   00003A   ........     CALLA   #wheel_Safety_Check
+     58              Display_Process();
+   \   00003E   ........     CALLA   #Display_Process
+   \   000042   F73F         JMP     ??main_0
+   \   000044   0343         NOP
+   \   000046                REQUIRE _A_PM5CTL0_L
+   \   000046                REQUIRE _A_PBOUT_L
+   \   000046                REQUIRE _A_PCOUT_L
+     59            }
+     60          }
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   main
+        4   -> Display_Process
+        4   -> Init_ADC
+        4   -> Init_Clocks
+        4   -> Init_Conditions
+        4   -> Init_DAC
+        4   -> Init_LCD
+        4   -> Init_Ports
+        4   -> Init_REF
+        4   -> Init_Timers
+        4   -> black_line_found
+        4   -> new_average_ADC
+        4   -> set_DAC_1200
+        4   -> wheel_Safety_Check
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_PBOUT_L
+       2  _A_PCOUT_L
+       2  _A_PM5CTL0_L
+      70  main
+
+ 
+ 70 bytes in segment CODE
+  6 bytes in segment DATA16_AN
+ 
+ 70 bytes of CODE memory
+  0 bytes of DATA memory (+ 6 bytes shared)
+
+Errors: none
+Warnings: none

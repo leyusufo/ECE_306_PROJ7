@@ -1,0 +1,376 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.20.1.997/W32 for MSP430           23/Apr/2021  20:27:56
+# Copyright 1996-2020 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.20
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\ADC.c
+#    Command line  =  
+#        -f C:\Users\loyda\AppData\Local\Temp\EW16D4.tmp
+#        ("C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\ADC.c" -lC "C:\Users\loyda\OneDrive\Documents\CLASS
+#        FOLDERS\ECE 306\ECE 306 CODE\Project_07\Debug\List" -o
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj" --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --debug -D__MSP430FR2355__ -e --double=32
+#        --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.4\430\lib\dlib\dl430xlsfn.h" -I ./ --core=430X --data_model=small
+#        -On --multiplier=32 --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List\ADC.lst
+#    Object file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj\ADC.r43
+#
+###############################################################################
+
+C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306 CODE\Project_07\ADC.c
+      1          #include  "macros.h"
+      2          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x700
+   \   union <unnamed> _A_ADCCTL0_L
+   \                     _A_ADCCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x702
+   \   union <unnamed> _A_ADCCTL1_L
+   \                     _A_ADCCTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x704
+   \   union <unnamed> _A_ADCCTL2_L
+   \                     _A_ADCCTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x70a
+   \   union <unnamed> _A_ADCMCTL0_L
+   \                     _A_ADCMCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x71a
+   \   union <unnamed> _A_ADCIE_L
+   \                     _A_ADCIE_L:
+   \   000000                DS8 2
+      3          #include  "functions.h"
+      4          //#include "ports.h"
+      5          
+      6          extern char changeDisplay;
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      7          unsigned int ADC_Left_Detect_Avg=RESET_STATE;
+   \                     ADC_Left_Detect_Avg:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      8          unsigned int ADC_Right_Detect_Avg=RESET_STATE;
+   \                     ADC_Right_Detect_Avg:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      9          unsigned int ADC_Thumb_Detect_Avg=RESET_STATE;
+   \                     ADC_Thumb_Detect_Avg:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     10          unsigned int old_ADC_Left_Detect=RESET_STATE;
+   \                     old_ADC_Left_Detect:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     11          unsigned int old_ADC_Right_Detect=RESET_STATE;
+   \                     old_ADC_Right_Detect:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     12          unsigned int old_ADC_Thumb_Detect=RESET_STATE;
+   \                     old_ADC_Thumb_Detect:
+   \   000000                DS8 2
+     13          extern unsigned int ADC_Left_Detect;
+     14          extern unsigned int ADC_Right_Detect;
+     15          extern unsigned int ADC_Thumb_Detect;
+     16          extern volatile unsigned char display_changed;
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          char new_ADC_reading=RESET_STATE;
+   \                     new_ADC_reading:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          extern char average_flag=RESET_STATE;
+   \                     average_flag:
+   \   000000                DS8 1
+     19          
+     20          extern char display_line[4][11];
+     21          extern char BDC_value[4];
+     22          
+     23          //ADC initialization 
+     24          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     25          void Init_ADC(void){
+   \                     Init_ADC:
+     26            
+     27            // V_DETECT_L (0x04) //Pin 2 A2
+     28            // V_DETECT_R (0x08) //Pin 3 A3
+     29            // V_THUMB (0x20) //Pin 5 A5
+     30            
+     31            // ADCCTL0 Register
+     32            ADCCTL0 = 0;            //Reset
+   \   000000   82430007     MOV.W   #0x0, &0x700
+     33            ADCCTL0 |= ADCSHT_2;    //16 ADC clocks
+   \   000004   B2D000020007 BIS.W   #0x200, &0x700
+     34            ADCCTL0 |= ADCMSC;      //MSC
+   \   00000A   B2D080000007 BIS.W   #0x80, &0x700
+     35            ADCCTL0 |= ADCON;       //ADC ON
+   \   000010   B2D010000007 BIS.W   #0x10, &0x700
+     36            
+     37            //ADCCTL1 Register
+     38            ADCCTL1 = 0;            // Reset
+   \   000016   82430207     MOV.W   #0x0, &0x702
+     39            ADCCTL1 |= ADCSHS_0;    //00b = ADCSC bit
+   \   00001A   924202070207 MOV.W   &0x702, &0x702
+     40            ADCCTL1 |= ADCSHP;      //ADC sample-and-hold SAMPCON signal from sampling timer.
+   \   000020   B2D000020207 BIS.W   #0x200, &0x702
+     41            ADCCTL1 &= ~ADCISSH;    //ADC invert signal sample-and-hold.
+   \   000026   B2C000010207 BIC.W   #0x100, &0x702
+     42            ADCCTL1 |= ADCDIV_0;    //ADC clock divider - 000b = Divide by 1
+   \   00002C   924202070207 MOV.W   &0x702, &0x702
+     43            ADCCTL1 |= ADCSSEL_0;   //ADC clock MODCLK
+   \   000032   924202070207 MOV.W   &0x702, &0x702
+     44            ADCCTL1 |= ADCCONSEQ_0; //ADC conversion sequence 00b = Single-channel single-conversion
+   \   000038   924202070207 MOV.W   &0x702, &0x702
+     45            //ADCCTL1 & ADCBUSY identifies a conversion is in process
+     46            
+     47            //ADCCTL2 Register
+     48            ADCCTL2 = 0;            //Reset
+   \   00003E   82430407     MOV.W   #0x0, &0x704
+     49            ADCCTL2 |= ADCPDIV0;    //ADC pre-divider 00b = Pre-divide by 1
+   \   000042   B2D000010407 BIS.W   #0x100, &0x704
+     50            ADCCTL2 |= ADCRES_1;    //ADC resolution 10b = 12 bit (14 clock cycle conversion time)
+   \   000048   B2D010000407 BIS.W   #0x10, &0x704
+     51            ADCCTL2 &= ~ADCDF;      //ADC data read-back format 0b = Binary unsigned.
+   \   00004E   B2C20407     BIC.W   #0x8, &0x704
+     52            ADCCTL2 &= ~ADCSR;      //ADC sampling rate 0b = ADC buffer supports up to 200 ksps
+   \   000052   A2C20407     BIC.W   #0x4, &0x704
+     53            
+     54            //ADCMCTL0 Register
+     55            ADCMCTL0 |= ADCSREF_0;  //VREF - 000b = {VR+ = AVCC and VR– = AVSS }
+   \   000056   92420A070A07 MOV.W   &0x70a, &0x70a
+     56            ADCMCTL0 |= ADCINCH_2;  //V_THUMB (0x20) Pin 5 A5
+   \   00005C   A2D30A07     BIS.W   #0x2, &0x70a
+     57            ADCIE |= ADCIE0;        //Enable ADC conv complete interrupt
+   \   000060   92D31A07     BIS.W   #0x1, &0x71a
+     58            ADCCTL0 |= ADCENC;      //ADC enable conversion.
+   \   000064   A2D30007     BIS.W   #0x2, &0x700
+     59            ADCCTL0 |= ADCSC;       //ADC start conversion.
+   \   000068   92D30007     BIS.W   #0x1, &0x700
+     60          }
+   \   00006C   1001         RETA
+   \   00006E                REQUIRE _A_ADCCTL0_L
+   \   00006E                REQUIRE _A_ADCCTL1_L
+   \   00006E                REQUIRE _A_ADCCTL2_L
+   \   00006E                REQUIRE _A_ADCMCTL0_L
+   \   00006E                REQUIRE _A_ADCIE_L
+     61          //------------------------------------------------------------------------------
+     62          
+
+   \                                 In  segment CODE, align 2
+     63          void ADC_readings(void){
+   \                     ADC_readings:
+     64            //displays the DAC readings for detectors
+     65            if((changeDisplay == TRUE)){
+   \   000000   D293....     CMP.B   #0x1, &changeDisplay
+   \   000004   2720         JNE     ??ADC_readings_0
+     66              if(ADC_Left_Detect_Avg != old_ADC_Left_Detect){
+   \   000006   9292........ CMP.W   &old_ADC_Left_Detect, &ADC_Left_Detect_Avg
+   \   00000C   0624         JEQ     ??ADC_readings_1
+     67                HEXtoBCD(ADC_Left_Detect_Avg);        // Convert result to String
+   \   00000E   1C42....     MOV.W   &ADC_Left_Detect_Avg, R12
+   \   000012   ........     CALLA   #HEXtoBCD
+     68                display_ADC_left_detect();
+   \   000016   ........     CALLA   #display_ADC_left_detect
+     69              }
+     70              if(ADC_Right_Detect_Avg != old_ADC_Right_Detect){
+   \                     ??ADC_readings_1:
+   \   00001A   9292........ CMP.W   &old_ADC_Right_Detect, &ADC_Right_Detect_Avg
+   \   000020   0624         JEQ     ??ADC_readings_2
+     71                HEXtoBCD(ADC_Right_Detect_Avg);        // Convert result to String
+   \   000022   1C42....     MOV.W   &ADC_Right_Detect_Avg, R12
+   \   000026   ........     CALLA   #HEXtoBCD
+     72                display_ADC_right_detect();
+   \   00002A   ........     CALLA   #display_ADC_right_detect
+     73              }
+     74              
+     75              display_changed = TRUE;                   //change the display
+   \                     ??ADC_readings_2:
+   \   00002E   D243....     MOV.B   #0x1, &display_changed
+     76              old_ADC_Left_Detect = ADC_Left_Detect_Avg;//save current value
+   \   000032   9242........ MOV.W   &ADC_Left_Detect_Avg, &old_ADC_Left_Detect
+     77              old_ADC_Right_Detect = ADC_Right_Detect_Avg;//save current value
+   \   000038   9242........ MOV.W   &ADC_Right_Detect_Avg, &old_ADC_Right_Detect
+     78              old_ADC_Thumb_Detect = ADC_Thumb_Detect_Avg;  //save current value
+   \   00003E   9242........ MOV.W   &ADC_Thumb_Detect_Avg, &old_ADC_Thumb_Detect
+     79              changeDisplay=RESET_STATE;           //dont change display until next reading
+   \   000044   C243....     MOV.B   #0x0, &changeDisplay
+     80              ADCMCTL0 |= ADCINCH_2;              //V_Left_Detect (0x20) Pin 2 A2
+   \   000048   A2D30A07     BIS.W   #0x2, &0x70a
+     81              ADCCTL0 |= ADCENC;                  // Enable Conversions
+   \   00004C   A2D30007     BIS.W   #0x2, &0x700
+     82              ADCCTL0 |= ADCSC;                   // ADC start conversion
+   \   000050   92D30007     BIS.W   #0x1, &0x700
+     83            }
+     84          }
+   \                     ??ADC_readings_0:
+   \   000054   1001         RETA
+   \   000056                REQUIRE _A_ADCMCTL0_L
+   \   000056                REQUIRE _A_ADCCTL0_L
+     85          
+     86          
+
+   \                                 In  segment CODE, align 2
+     87          int ADC_movement(void){
+   \                     ADC_movement:
+     88            if(new_ADC_reading){
+   \   000000   C293....     CMP.B   #0x0, &new_ADC_reading
+   \   000004   3124         JEQ     ??ADC_movement_0
+     89              if((ADC_Left_Detect<65)&&(ADC_Right_Detect<65)){
+   \   000006   B2904100.... CMP.W   #0x41, &ADC_Left_Detect
+   \   00000C   062C         JC      ??ADC_movement_1
+   \   00000E   B2904100.... CMP.W   #0x41, &ADC_Right_Detect
+   \   000014   022C         JC      ??ADC_movement_1
+     90                return 0;
+   \   000016   0C43         MOV.W   #0x0, R12
+   \   000018   1001         RETA
+     91              } 
+     92              if((ADC_Left_Detect>200)&&(ADC_Right_Detect>200)){
+   \                     ??ADC_movement_1:
+   \   00001A   B290C900.... CMP.W   #0xc9, &ADC_Left_Detect
+   \   000020   0628         JNC     ??ADC_movement_2
+   \   000022   B290C900.... CMP.W   #0xc9, &ADC_Right_Detect
+   \   000028   0228         JNC     ??ADC_movement_2
+     93                return 1;
+   \   00002A   1C43         MOV.W   #0x1, R12
+   \   00002C   1001         RETA
+     94              }
+     95              if(ADC_Left_Detect>400){
+   \                     ??ADC_movement_2:
+   \   00002E   B2909101.... CMP.W   #0x191, &ADC_Left_Detect
+   \   000034   0928         JNC     ??ADC_movement_3
+     96                if((ADC_Left_Detect-ADC_Right_Detect)>200){
+   \   000036   1F42....     MOV.W   &ADC_Left_Detect, R15
+   \   00003A   1F82....     SUB.W   &ADC_Right_Detect, R15
+   \   00003E   3F90C900     CMP.W   #0xc9, R15
+   \   000042   0228         JNC     ??ADC_movement_3
+     97                  return 2;
+   \   000044   2C43         MOV.W   #0x2, R12
+   \   000046   1001         RETA
+     98                }
+     99              }
+    100              if(ADC_Right_Detect>400){
+   \                     ??ADC_movement_3:
+   \   000048   B2909101.... CMP.W   #0x191, &ADC_Right_Detect
+   \   00004E   0A28         JNC     ??ADC_movement_4
+    101                if((ADC_Right_Detect-ADC_Left_Detect)>200){
+   \   000050   1F42....     MOV.W   &ADC_Right_Detect, R15
+   \   000054   1F82....     SUB.W   &ADC_Left_Detect, R15
+   \   000058   3F90C900     CMP.W   #0xc9, R15
+   \   00005C   0328         JNC     ??ADC_movement_4
+    102                  return 3;
+   \   00005E   3C400300     MOV.W   #0x3, R12
+   \   000062   1001         RETA
+    103                }
+    104              }
+    105              new_ADC_reading=FALSE;
+   \                     ??ADC_movement_4:
+   \   000064   C243....     MOV.B   #0x0, &new_ADC_reading
+    106            }
+    107            
+    108            return 10;
+   \                     ??ADC_movement_0:
+   \   000068   3C400A00     MOV.W   #0xa, R12
+   \   00006C   1001         RETA
+    109          }
+    110          
+
+   \                                 In  segment CODE, align 2
+    111          void new_average_ADC(void){
+   \                     new_average_ADC:
+    112            if((average_flag==TRUE)){
+   \   000000   D293....     CMP.B   #0x1, &average_flag
+   \   000004   0420         JNE     ??new_average_ADC_0
+    113              ADC_readings();
+   \   000006   ........     CALLA   #ADC_readings
+    114              average_flag=FALSE;
+   \   00000A   C243....     MOV.B   #0x0, &average_flag
+    115            }
+    116          }
+   \                     ??new_average_ADC_0:
+   \   00000E   1001         RETA
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   ADC_movement
+      4   ADC_readings
+        4   -> HEXtoBCD
+        4   -> display_ADC_left_detect
+        4   -> display_ADC_right_detect
+      4   Init_ADC
+      4   new_average_ADC
+        4   -> ADC_readings
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ADC_Left_Detect_Avg
+       2  ADC_Right_Detect_Avg
+       2  ADC_Thumb_Detect_Avg
+     110  ADC_movement
+      86  ADC_readings
+     110  Init_ADC
+       2  _A_ADCCTL0_L
+       2  _A_ADCCTL1_L
+       2  _A_ADCCTL2_L
+       2  _A_ADCIE_L
+       2  _A_ADCMCTL0_L
+       1  average_flag
+       1  new_ADC_reading
+      16  new_average_ADC
+       2  old_ADC_Left_Detect
+       2  old_ADC_Right_Detect
+       2  old_ADC_Thumb_Detect
+
+ 
+ 322 bytes in segment CODE
+  10 bytes in segment DATA16_AN
+  14 bytes in segment DATA16_Z
+ 
+ 322 bytes of CODE memory
+  14 bytes of DATA memory (+ 10 bytes shared)
+
+Errors: none
+Warnings: none

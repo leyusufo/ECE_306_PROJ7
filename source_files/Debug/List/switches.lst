@@ -1,0 +1,181 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.20.1.997/W32 for MSP430           04/Mar/2021  16:57:24
+# Copyright 1996-2020 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.20
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\switches.c
+#    Command line  =  
+#        -f C:\Users\loyda\AppData\Local\Temp\EW4402.tmp
+#        ("C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\switches.c" -lC
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\Debug\List" -o
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\Debug\Obj" --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --debug -D__MSP430FR2355__ -e --double=32
+#        --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.4\430\lib\dlib\dl430xlsfn.h" -I ./ --core=430X --data_model=small
+#        -On --multiplier=32 --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\Debug\List\switches.lst
+#    Object file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_05\Debug\Obj\switches.r43
+#
+###############################################################################
+
+C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306 CODE\Project_05\switches.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the Main Routine - "While" Operating System
+      4          //
+      5          //
+      6          //  Jim Carlson
+      7          //  Jan 2018
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "functions.h"
+     13          #include  "macros.h"
+     14          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x21a
+   \   union <unnamed> _A_PAIE_L
+   \                     _A_PAIE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x21c
+   \   union <unnamed> _A_PAIFG_L
+   \                     _A_PAIFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23a
+   \   union <unnamed> _A_PBIE_L
+   \                     _A_PBIE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23c
+   \   union <unnamed> _A_PBIFG_L
+   \                     _A_PBIFG_L:
+   \   000000                DS8 2
+     15          #include "ports.h"
+     16          
+     17          extern char okay_to_look_at_switch1;
+     18          extern unsigned int count_debounce_SW1;
+     19          extern char sw1_position;
+     20          extern char okay_to_look_at_switch2;
+     21          extern char sw2_position;
+     22          extern unsigned int count_debounce_SW2;
+     23          
+     24          //enable switch 1 if the debounce timer has been reached
+
+   \                                 In  segment CODE, align 2
+     25          void enable_switch_SW1(void){
+   \                     enable_switch_SW1:
+     26            if (count_debounce_SW1 <= DEBOUNCE_TIME){
+   \   000000   B2901500.... CMP.W   #0x15, &count_debounce_SW1
+   \   000006   032C         JC      ??enable_switch_SW1_0
+     27              //keep counting up
+     28              count_debounce_SW1++;
+   \   000008   9253....     ADD.W   #0x1, &count_debounce_SW1
+   \   00000C   1001         RETA
+     29            }
+     30            else{
+     31              count_debounce_SW1 = DEBOUNCE_RESTART;
+   \                     ??enable_switch_SW1_0:
+   \   00000E   8243....     MOV.W   #0x0, &count_debounce_SW1
+     32              //we can check the switch
+     33              okay_to_look_at_switch1 = TRUE;
+   \   000012   D243....     MOV.B   #0x1, &okay_to_look_at_switch1
+     34              //the switch is not pressed
+     35              sw1_position = RELEASED;
+   \   000016   D243....     MOV.B   #0x1, &sw1_position
+     36              //clear my flag
+     37              P4IFG &= ~SW1;
+   \   00001A   E2C33D02     BIC.B   #0x2, &0x23d
+     38              //enable switch interrupt
+     39              P4IE |= SW1;
+   \   00001E   E2D33B02     BIS.B   #0x2, &0x23b
+     40            }           
+     41          }
+   \   000022   1001         RETA
+   \   000024                REQUIRE _A_PBIFG_L
+   \   000024                REQUIRE _A_PBIE_L
+     42          
+     43          //enable switch 2 if the debounce timer has been reached
+
+   \                                 In  segment CODE, align 2
+     44          void enable_switch_SW2(void){
+   \                     enable_switch_SW2:
+     45            if (count_debounce_SW2 <= DEBOUNCE_TIME){
+   \   000000   B2901500.... CMP.W   #0x15, &count_debounce_SW2
+   \   000006   032C         JC      ??enable_switch_SW2_0
+     46              //keep counting up
+     47              count_debounce_SW2++;
+   \   000008   9253....     ADD.W   #0x1, &count_debounce_SW2
+   \   00000C   1001         RETA
+     48            }
+     49            else{
+     50              count_debounce_SW2 = DEBOUNCE_RESTART;
+   \                     ??enable_switch_SW2_0:
+   \   00000E   8243....     MOV.W   #0x0, &count_debounce_SW2
+     51              //we can check the switch
+     52              okay_to_look_at_switch2 = TRUE;
+   \   000012   D243....     MOV.B   #0x1, &okay_to_look_at_switch2
+     53              //the switch is not pressed
+     54              sw2_position = RELEASED;
+   \   000016   D243....     MOV.B   #0x1, &sw2_position
+     55              //clear my flag
+     56              P2IFG &= ~SW2;
+   \   00001A   F2C21D02     BIC.B   #0x8, &0x21d
+     57              //enable switch interrupt
+     58              P2IE |= SW2;
+   \   00001E   F2D21B02     BIS.B   #0x8, &0x21b
+     59            }           
+     60          }
+   \   000022   1001         RETA
+   \   000024                REQUIRE _A_PAIFG_L
+   \   000024                REQUIRE _A_PAIE_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   enable_switch_SW1
+      4   enable_switch_SW2
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_PAIE_L
+       2  _A_PAIFG_L
+       2  _A_PBIE_L
+       2  _A_PBIFG_L
+      36  enable_switch_SW1
+      36  enable_switch_SW2
+
+ 
+ 72 bytes in segment CODE
+  8 bytes in segment DATA16_AN
+ 
+ 72 bytes of CODE memory
+  0 bytes of DATA memory (+ 8 bytes shared)
+
+Errors: none
+Warnings: none

@@ -1,0 +1,247 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.20.1.997/W32 for MSP430           06/Apr/2021  00:13:15
+# Copyright 1996-2020 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.20
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\display_message.c
+#    Command line  =  
+#        -f C:\Users\loyda\AppData\Local\Temp\EW5555.tmp
+#        ("C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\display_message.c" -lC
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List" -o
+#        "C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj" --no_cse --no_unroll --no_inline
+#        --no_code_motion --no_tbaa --debug -D__MSP430FR2355__ -e --double=32
+#        --dlib_config "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.4\430\lib\dlib\dl430xlsfn.h" -I ./ --core=430X --data_model=small
+#        -On --multiplier=32 --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\List\display_message.lst
+#    Object file   =  
+#        C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306
+#        CODE\Project_07\Debug\Obj\display_message.r43
+#
+###############################################################################
+
+C:\Users\loyda\OneDrive\Documents\CLASS FOLDERS\ECE 306\ECE 306 CODE\Project_07\display_message.c
+      1          #include  "functions.h"
+      2          
+      3          extern char display_line[4][11];
+      4          extern char BDC_value[4];
+      5          
+
+   \                                 In  segment CODE, align 2
+      6          void blackLineDetected(void){
+   \                     blackLineDetected:
+      7            display_line[2][0]='B';
+   \   000000   F2404200.... MOV.B   #0x42, &display_line + 22
+      8            display_line[2][1]='L';
+   \   000006   F2404C00.... MOV.B   #0x4c, &display_line + 23
+      9            display_line[2][2]='A';
+   \   00000C   F2404100.... MOV.B   #0x41, &display_line + 24
+     10            display_line[2][3]='C';
+   \   000012   F2404300.... MOV.B   #0x43, &display_line + 25
+     11            display_line[2][4]='K';
+   \   000018   F2404B00.... MOV.B   #0x4b, &display_line + 26
+     12            display_line[2][5]=' ';
+   \   00001E   F2402000.... MOV.B   #0x20, &display_line + 27
+     13            display_line[2][6]='L';
+   \   000024   F2404C00.... MOV.B   #0x4c, &display_line + 28
+     14            display_line[2][7]='I';
+   \   00002A   F2404900.... MOV.B   #0x49, &display_line + 29
+     15            display_line[2][8]='N';
+   \   000030   F2404E00.... MOV.B   #0x4e, &display_line + 30
+     16            display_line[2][9]='E';
+   \   000036   F2404500.... MOV.B   #0x45, &display_line + 31
+     17            display_line[2][10]=' ';
+   \   00003C   F2402000.... MOV.B   #0x20, &display_line + 32
+     18            
+     19            display_line[3][0]='D';
+   \   000042   F2404400.... MOV.B   #0x44, &display_line + 33
+     20            display_line[3][1]='E';
+   \   000048   F2404500.... MOV.B   #0x45, &display_line + 34
+     21            display_line[3][2]='T';
+   \   00004E   F2405400.... MOV.B   #0x54, &display_line + 35
+     22            display_line[3][3]='E';
+   \   000054   F2404500.... MOV.B   #0x45, &display_line + 36
+     23            display_line[3][4]='C';
+   \   00005A   F2404300.... MOV.B   #0x43, &display_line + 37
+     24            display_line[3][5]='T';
+   \   000060   F2405400.... MOV.B   #0x54, &display_line + 38
+     25            display_line[3][6]='E';
+   \   000066   F2404500.... MOV.B   #0x45, &display_line + 39
+     26            display_line[3][7]='D';
+   \   00006C   F2404400.... MOV.B   #0x44, &display_line + 40
+     27            display_line[3][8]=' ';
+   \   000072   F2402000.... MOV.B   #0x20, &display_line + 41
+     28            display_line[3][9]=' ';
+   \   000078   F2402000.... MOV.B   #0x20, &display_line + 42
+     29            display_line[3][10]=' ';
+   \   00007E   F2402000.... MOV.B   #0x20, &display_line + 43
+     30          }
+   \   000084   1001         RETA
+
+   \                                 In  segment CODE, align 2
+     31          void message_left(void){
+   \                     message_left:
+     32          display_line[3][0]='G';
+   \   000000   F2404700.... MOV.B   #0x47, &display_line + 33
+     33              display_line[3][1]='O';
+   \   000006   F2404F00.... MOV.B   #0x4f, &display_line + 34
+     34              display_line[3][2]='I';
+   \   00000C   F2404900.... MOV.B   #0x49, &display_line + 35
+     35              display_line[3][3]='N';
+   \   000012   F2404E00.... MOV.B   #0x4e, &display_line + 36
+     36              display_line[3][4]='G';
+   \   000018   F2404700.... MOV.B   #0x47, &display_line + 37
+     37              display_line[3][5]=' ';
+   \   00001E   F2402000.... MOV.B   #0x20, &display_line + 38
+     38              display_line[3][6]='L';
+   \   000024   F2404C00.... MOV.B   #0x4c, &display_line + 39
+     39              display_line[3][7]='E';
+   \   00002A   F2404500.... MOV.B   #0x45, &display_line + 40
+     40              display_line[3][8]='F';
+   \   000030   F2404600.... MOV.B   #0x46, &display_line + 41
+     41              display_line[3][9]='T';
+   \   000036   F2405400.... MOV.B   #0x54, &display_line + 42
+     42              display_line[3][10]=' ';
+   \   00003C   F2402000.... MOV.B   #0x20, &display_line + 43
+     43          }
+   \   000042   1001         RETA
+
+   \                                 In  segment CODE, align 2
+     44          void message_right(void){
+   \                     message_right:
+     45            display_line[3][0]='G';
+   \   000000   F2404700.... MOV.B   #0x47, &display_line + 33
+     46              display_line[3][1]='O';
+   \   000006   F2404F00.... MOV.B   #0x4f, &display_line + 34
+     47              display_line[3][2]='I';
+   \   00000C   F2404900.... MOV.B   #0x49, &display_line + 35
+     48              display_line[3][3]='N';
+   \   000012   F2404E00.... MOV.B   #0x4e, &display_line + 36
+     49              display_line[3][4]='G';
+   \   000018   F2404700.... MOV.B   #0x47, &display_line + 37
+     50              display_line[3][5]=' ';
+   \   00001E   F2402000.... MOV.B   #0x20, &display_line + 38
+     51              display_line[3][6]='R';
+   \   000024   F2405200.... MOV.B   #0x52, &display_line + 39
+     52              display_line[3][7]='I';
+   \   00002A   F2404900.... MOV.B   #0x49, &display_line + 40
+     53              display_line[3][8]='G';
+   \   000030   F2404700.... MOV.B   #0x47, &display_line + 41
+     54              display_line[3][9]='H';
+   \   000036   F2404800.... MOV.B   #0x48, &display_line + 42
+     55              display_line[3][10]=' ';
+   \   00003C   F2402000.... MOV.B   #0x20, &display_line + 43
+     56          }
+   \   000042   1001         RETA
+
+   \                                 In  segment CODE, align 2
+     57          void clear_line3_display(void){
+   \                     clear_line3_display:
+     58          display_line[3][0]=' ';
+   \   000000   F2402000.... MOV.B   #0x20, &display_line + 33
+     59              display_line[3][1]=' ';
+   \   000006   F2402000.... MOV.B   #0x20, &display_line + 34
+     60              display_line[3][2]=' ';
+   \   00000C   F2402000.... MOV.B   #0x20, &display_line + 35
+     61              display_line[3][3]=' ';
+   \   000012   F2402000.... MOV.B   #0x20, &display_line + 36
+     62              display_line[3][4]=' ';
+   \   000018   F2402000.... MOV.B   #0x20, &display_line + 37
+     63              display_line[3][5]=' ';
+   \   00001E   F2402000.... MOV.B   #0x20, &display_line + 38
+     64              display_line[3][6]=' ';
+   \   000024   F2402000.... MOV.B   #0x20, &display_line + 39
+     65              display_line[3][7]=' ';
+   \   00002A   F2402000.... MOV.B   #0x20, &display_line + 40
+     66              display_line[3][8]=' ';
+   \   000030   F2402000.... MOV.B   #0x20, &display_line + 41
+     67              display_line[3][9]=' ';
+   \   000036   F2402000.... MOV.B   #0x20, &display_line + 42
+     68              display_line[3][10]=' ';
+   \   00003C   F2402000.... MOV.B   #0x20, &display_line + 43
+     69          }
+   \   000042   1001         RETA
+
+   \                                 In  segment CODE, align 2
+     70          void display_ADC_left_detect(void){
+   \                     display_ADC_left_detect:
+     71                display_line[0][0]=BDC_value[0];
+   \   000000   D242........ MOV.B   &BDC_value, &display_line
+     72                display_line[0][1]=BDC_value[1];
+   \   000006   D242........ MOV.B   &BDC_value + 1, &display_line + 1
+     73                display_line[0][2]=BDC_value[2];
+   \   00000C   D242........ MOV.B   &BDC_value + 2, &display_line + 2
+     74                display_line[0][3]=BDC_value[3];
+   \   000012   D242........ MOV.B   &BDC_value + 3, &display_line + 3
+     75                display_line[0][4]=' ';
+   \   000018   F2402000.... MOV.B   #0x20, &display_line + 4
+     76                display_line[0][5]=' ';
+   \   00001E   F2402000.... MOV.B   #0x20, &display_line + 5
+     77          }
+   \   000024   1001         RETA
+
+   \                                 In  segment CODE, align 2
+     78          void display_ADC_right_detect(void){
+   \                     display_ADC_right_detect:
+     79                display_line[0][4]=' ';
+   \   000000   F2402000.... MOV.B   #0x20, &display_line + 4
+     80                display_line[0][5]=' ';
+   \   000006   F2402000.... MOV.B   #0x20, &display_line + 5
+     81                display_line[0][6]=BDC_value[0];
+   \   00000C   D242........ MOV.B   &BDC_value, &display_line + 6
+     82                display_line[0][7]=BDC_value[1];
+   \   000012   D242........ MOV.B   &BDC_value + 1, &display_line + 7
+     83                display_line[0][8]=BDC_value[2];
+   \   000018   D242........ MOV.B   &BDC_value + 2, &display_line + 8
+     84                display_line[0][9]=BDC_value[3];
+   \   00001E   D242........ MOV.B   &BDC_value + 3, &display_line + 9
+     85          }
+   \   000024   1001         RETA
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   blackLineDetected
+      4   clear_line3_display
+      4   display_ADC_left_detect
+      4   display_ADC_right_detect
+      4   message_left
+      4   message_right
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     134  blackLineDetected
+      68  clear_line3_display
+      38  display_ADC_left_detect
+      38  display_ADC_right_detect
+      68  message_left
+      68  message_right
+
+ 
+ 414 bytes in segment CODE
+ 
+ 414 bytes of CODE memory
+
+Errors: none
+Warnings: none
